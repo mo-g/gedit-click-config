@@ -46,6 +46,7 @@ gpl.txt                     -- GNU General Public License.
 
 Related modules:
 click_config_data -- provides the configuration data store
+click_config_dictfile -- provides some functions used by click_config_data
 click_config_ui -- provides the configuration window
 
 Also requires:
