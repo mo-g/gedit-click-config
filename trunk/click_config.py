@@ -119,7 +119,7 @@ class ClickConfigPlugin(gedit.Plugin):
         formatter = logging.Formatter(log_format)
         handler.setFormatter(formatter)
         self.logger.addHandler(handler)
-        self.logger.setLevel(logging.INFO)
+        self.logger.setLevel(logging.WARNING)
         self.logger.debug(whoami(self))
         self.logger.info('Logging started.')
         
