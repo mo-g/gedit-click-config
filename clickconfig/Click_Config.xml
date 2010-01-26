@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!--Generated with glade3 3.4.5 on Mon Jan 25 16:40:24 2010 -->
+<!--Generated with glade3 3.4.5 on Mon Jan 25 21:22:10 2010 -->
 <interface>
   <object class="GtkListStore" id="model1">
     <columns>
@@ -107,20 +107,31 @@
                         <property name="n_columns">3</property>
                         <property name="column_spacing">5</property>
                         <child>
-                          <object class="GtkCheckButton" id="lang_checkbutton">
+                          <object class="GtkComboBoxEntry" id="config_combobox_entry">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="tooltip-text" translatable="yes">Select to have Click_Config use the configuration to which the document's source language is assigned.</property>
-                            <property name="label" translatable="yes">Configure by language</property>
-                            <property name="focus_on_click">False</property>
-                            <property name="draw_indicator">True</property>
-                            <signal handler="on_lang_checkbutton_toggled" name="toggled"/>
+                            <property name="tooltip-text" translatable="yes">Select a configuration for all clicks.</property>
+                            <signal handler="on_config_combobox_entry_changed" name="changed"/>
+                            <child internal-child="entry">
+                              <object class="GtkEntry" id="comboboxentry-entry1">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="tooltip-text" translatable="yes">Type a name for a new configuration (then click Add) or select another configuration.</property>
+                                <property name="activates_default">True</property>
+                                <signal handler="on_comboboxentryentry1_key_press_event" name="key_press_event"/>
+                              </object>
+                            </child>
+                            <property name="model">model1</property>
+                            <child>
+                              <object class="GtkCellRendererText" id="renderer1"/>
+                              <attributes>
+                                <attribute name="text">0</attribute>
+                              </attributes>
+                            </child>
                           </object>
                           <packing>
-                            <property name="left_attach">2</property>
-                            <property name="right_attach">3</property>
-                            <property name="x_options">GTK_FILL</property>
-                            <property name="y_options">GTK_FILL</property>
+                            <property name="left_attach">1</property>
+                            <property name="right_attach">2</property>
+                            <property name="y_options"/>
                           </packing>
                         </child>
                         <child>
@@ -159,31 +170,20 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkComboBoxEntry" id="config_combobox_entry">
+                          <object class="GtkCheckButton" id="lang_checkbutton">
                             <property name="visible">True</property>
-                            <property name="tooltip-text" translatable="yes">Select a configuration for all clicks.</property>
-                            <signal handler="on_config_combobox_entry_changed" name="changed"/>
-                            <child internal-child="entry">
-                              <object class="GtkEntry" id="comboboxentry-entry1">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="tooltip-text" translatable="yes">Type a name for a new configuration (then click Add) or select another configuration.</property>
-                                <property name="activates_default">True</property>
-                                <signal handler="on_comboboxentryentry1_key_press_event" name="key_press_event"/>
-                              </object>
-                            </child>
-                            <property name="model">model1</property>
-                            <child>
-                              <object class="GtkCellRendererText" id="renderer1"/>
-                              <attributes>
-                                <attribute name="text">0</attribute>
-                              </attributes>
-                            </child>
+                            <property name="can_focus">True</property>
+                            <property name="tooltip-text" translatable="yes">Select to have Click_Config use the configuration to which the document's source language is assigned.</property>
+                            <property name="label" translatable="yes">Configure by language</property>
+                            <property name="focus_on_click">False</property>
+                            <property name="draw_indicator">True</property>
+                            <signal handler="on_lang_checkbutton_toggled" name="toggled"/>
                           </object>
                           <packing>
-                            <property name="left_attach">1</property>
-                            <property name="right_attach">2</property>
-                            <property name="y_options"/>
+                            <property name="left_attach">2</property>
+                            <property name="right_attach">3</property>
+                            <property name="x_options">GTK_FILL</property>
+                            <property name="y_options">GTK_FILL</property>
                           </packing>
                         </child>
                       </object>
@@ -197,67 +197,12 @@
                         <property name="n_rows">6</property>
                         <property name="n_columns">4</property>
                         <child>
-                          <object class="GtkHBox" id="flags_hbox5">
+                          <object class="GtkLabel" id="label5">
                             <property name="visible">True</property>
-                            <property name="tooltip-text" translatable="yes">Use the Define section below to edit these values.</property>
-                            <child>
-                              <object class="GtkCheckButton" id="i_checkbutton5">
-                                <property name="visible">True</property>
-                                <property name="sensitive">False</property>
-                                <property name="can_focus">True</property>
-                                <property name="tooltip-text" translatable="yes">IGNORECASE
-    Perform case-insensitive matching; expressions like [A-Z] will match lowercase letters, too.</property>
-                                <property name="label" translatable="yes">I</property>
-                                <property name="draw_indicator">True</property>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkCheckButton" id="m_checkbutton5">
-                                <property name="visible">True</property>
-                                <property name="sensitive">False</property>
-                                <property name="can_focus">True</property>
-                                <property name="tooltip-text" translatable="yes">MULTILINE
-    Without this flag, only the current line is searched.
-    When specified, the pattern character '^' matches at the beginning of the string and at the beginning of each line (immediately following each newline); and the pattern character '$' matches at the end of the string and at the end of each line (immediately preceding each newline). By default, '^' matches only at the beginning of the string, and '$' only at the end of the string and immediately before the newline (if any) at the end of the string.</property>
-                                <property name="label" translatable="yes">M</property>
-                                <property name="draw_indicator">True</property>
-                              </object>
-                              <packing>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkCheckButton" id="s_checkbutton5">
-                                <property name="visible">True</property>
-                                <property name="sensitive">False</property>
-                                <property name="can_focus">True</property>
-                                <property name="tooltip-text" translatable="yes">DOTALL
-    Make the '.' special character match any character at all, including a newline; without this flag, '.' will match anything except a newline.</property>
-                                <property name="label" translatable="yes">S</property>
-                                <property name="draw_indicator">True</property>
-                              </object>
-                              <packing>
-                                <property name="position">2</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkCheckButton" id="x_checkbutton5">
-                                <property name="visible">True</property>
-                                <property name="sensitive">False</property>
-                                <property name="can_focus">True</property>
-                                <property name="tooltip-text" translatable="yes">VERBOSE
-    This flag allows you to write regular expressions that look nicer. Whitespace within the pattern is ignored, except when in a character class or preceded by an unescaped backslash, and, when a line contains a '#' neither in a character class or preceded by an unescaped backslash, all characters from the leftmost such '#' through the end of the line are ignored.</property>
-                                <property name="label" translatable="yes">X</property>
-                                <property name="draw_indicator">True</property>
-                              </object>
-                              <packing>
-                                <property name="position">3</property>
-                              </packing>
-                            </child>
+                            <property name="xpad">5</property>
+                            <property name="label" translatable="yes">Quintuple click</property>
                           </object>
                           <packing>
-                            <property name="left_attach">3</property>
-                            <property name="right_attach">4</property>
                             <property name="top_attach">5</property>
                             <property name="bottom_attach">6</property>
                             <property name="x_options">GTK_FILL</property>
@@ -265,67 +210,12 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkHBox" id="flags_hbox4">
+                          <object class="GtkLabel" id="label4">
                             <property name="visible">True</property>
-                            <property name="tooltip-text" translatable="yes">Use the Define section below to edit these values.</property>
-                            <child>
-                              <object class="GtkCheckButton" id="i_checkbutton4">
-                                <property name="visible">True</property>
-                                <property name="sensitive">False</property>
-                                <property name="can_focus">True</property>
-                                <property name="tooltip-text" translatable="yes">IGNORECASE
-    Perform case-insensitive matching; expressions like [A-Z] will match lowercase letters, too.</property>
-                                <property name="label" translatable="yes">I</property>
-                                <property name="draw_indicator">True</property>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkCheckButton" id="m_checkbutton4">
-                                <property name="visible">True</property>
-                                <property name="sensitive">False</property>
-                                <property name="can_focus">True</property>
-                                <property name="tooltip-text" translatable="yes">MULTILINE
-    Without this flag, only the current line is searched.
-    When specified, the pattern character '^' matches at the beginning of the string and at the beginning of each line (immediately following each newline); and the pattern character '$' matches at the end of the string and at the end of each line (immediately preceding each newline). By default, '^' matches only at the beginning of the string, and '$' only at the end of the string and immediately before the newline (if any) at the end of the string.</property>
-                                <property name="label" translatable="yes">M</property>
-                                <property name="draw_indicator">True</property>
-                              </object>
-                              <packing>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkCheckButton" id="s_checkbutton4">
-                                <property name="visible">True</property>
-                                <property name="sensitive">False</property>
-                                <property name="can_focus">True</property>
-                                <property name="tooltip-text" translatable="yes">DOTALL
-    Make the '.' special character match any character at all, including a newline; without this flag, '.' will match anything except a newline.</property>
-                                <property name="label" translatable="yes">S</property>
-                                <property name="draw_indicator">True</property>
-                              </object>
-                              <packing>
-                                <property name="position">2</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkCheckButton" id="x_checkbutton4">
-                                <property name="visible">True</property>
-                                <property name="sensitive">False</property>
-                                <property name="can_focus">True</property>
-                                <property name="tooltip-text" translatable="yes">VERBOSE
-    This flag allows you to write regular expressions that look nicer. Whitespace within the pattern is ignored, except when in a character class or preceded by an unescaped backslash, and, when a line contains a '#' neither in a character class or preceded by an unescaped backslash, all characters from the leftmost such '#' through the end of the line are ignored.</property>
-                                <property name="label" translatable="yes">X</property>
-                                <property name="draw_indicator">True</property>
-                              </object>
-                              <packing>
-                                <property name="position">3</property>
-                              </packing>
-                            </child>
+                            <property name="xpad">5</property>
+                            <property name="label" translatable="yes">Quadruple click</property>
                           </object>
                           <packing>
-                            <property name="left_attach">3</property>
-                            <property name="right_attach">4</property>
                             <property name="top_attach">4</property>
                             <property name="bottom_attach">5</property>
                             <property name="x_options">GTK_FILL</property>
@@ -333,67 +223,12 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkHBox" id="flags_hbox3">
+                          <object class="GtkLabel" id="label3">
                             <property name="visible">True</property>
-                            <property name="tooltip-text" translatable="yes">Use the Define section below to edit these values.</property>
-                            <child>
-                              <object class="GtkCheckButton" id="i_checkbutton3">
-                                <property name="visible">True</property>
-                                <property name="sensitive">False</property>
-                                <property name="can_focus">True</property>
-                                <property name="tooltip-text" translatable="yes">IGNORECASE
-    Perform case-insensitive matching; expressions like [A-Z] will match lowercase letters, too.</property>
-                                <property name="label" translatable="yes">I</property>
-                                <property name="draw_indicator">True</property>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkCheckButton" id="m_checkbutton3">
-                                <property name="visible">True</property>
-                                <property name="sensitive">False</property>
-                                <property name="can_focus">True</property>
-                                <property name="tooltip-text" translatable="yes">MULTILINE
-    Without this flag, only the current line is searched.
-    When specified, the pattern character '^' matches at the beginning of the string and at the beginning of each line (immediately following each newline); and the pattern character '$' matches at the end of the string and at the end of each line (immediately preceding each newline). By default, '^' matches only at the beginning of the string, and '$' only at the end of the string and immediately before the newline (if any) at the end of the string.</property>
-                                <property name="label" translatable="yes">M</property>
-                                <property name="draw_indicator">True</property>
-                              </object>
-                              <packing>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkCheckButton" id="s_checkbutton3">
-                                <property name="visible">True</property>
-                                <property name="sensitive">False</property>
-                                <property name="can_focus">True</property>
-                                <property name="tooltip-text" translatable="yes">DOTALL
-    Make the '.' special character match any character at all, including a newline; without this flag, '.' will match anything except a newline.</property>
-                                <property name="label" translatable="yes">S</property>
-                                <property name="draw_indicator">True</property>
-                              </object>
-                              <packing>
-                                <property name="position">2</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkCheckButton" id="x_checkbutton3">
-                                <property name="visible">True</property>
-                                <property name="sensitive">False</property>
-                                <property name="can_focus">True</property>
-                                <property name="tooltip-text" translatable="yes">VERBOSE
-    This flag allows you to write regular expressions that look nicer. Whitespace within the pattern is ignored, except when in a character class or preceded by an unescaped backslash, and, when a line contains a '#' neither in a character class or preceded by an unescaped backslash, all characters from the leftmost such '#' through the end of the line are ignored.</property>
-                                <property name="label" translatable="yes">X</property>
-                                <property name="draw_indicator">True</property>
-                              </object>
-                              <packing>
-                                <property name="position">3</property>
-                              </packing>
-                            </child>
+                            <property name="xpad">5</property>
+                            <property name="label" translatable="yes">Triple click</property>
                           </object>
                           <packing>
-                            <property name="left_attach">3</property>
-                            <property name="right_attach">4</property>
                             <property name="top_attach">3</property>
                             <property name="bottom_attach">4</property>
                             <property name="x_options">GTK_FILL</property>
@@ -401,67 +236,12 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkHBox" id="flags_hbox2">
+                          <object class="GtkLabel" id="label2">
                             <property name="visible">True</property>
-                            <property name="tooltip-text" translatable="yes">Use the Define section below to edit these values.</property>
-                            <child>
-                              <object class="GtkCheckButton" id="i_checkbutton2">
-                                <property name="visible">True</property>
-                                <property name="sensitive">False</property>
-                                <property name="can_focus">True</property>
-                                <property name="tooltip-text" translatable="yes">IGNORECASE
-    Perform case-insensitive matching; expressions like [A-Z] will match lowercase letters, too.</property>
-                                <property name="label" translatable="yes">I</property>
-                                <property name="draw_indicator">True</property>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkCheckButton" id="m_checkbutton2">
-                                <property name="visible">True</property>
-                                <property name="sensitive">False</property>
-                                <property name="can_focus">True</property>
-                                <property name="tooltip-text" translatable="yes">MULTILINE
-    Without this flag, only the current line is searched.
-    When specified, the pattern character '^' matches at the beginning of the string and at the beginning of each line (immediately following each newline); and the pattern character '$' matches at the end of the string and at the end of each line (immediately preceding each newline). By default, '^' matches only at the beginning of the string, and '$' only at the end of the string and immediately before the newline (if any) at the end of the string.</property>
-                                <property name="label" translatable="yes">M</property>
-                                <property name="draw_indicator">True</property>
-                              </object>
-                              <packing>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkCheckButton" id="s_checkbutton2">
-                                <property name="visible">True</property>
-                                <property name="sensitive">False</property>
-                                <property name="can_focus">True</property>
-                                <property name="tooltip-text" translatable="yes">DOTALL
-    Make the '.' special character match any character at all, including a newline; without this flag, '.' will match anything except a newline.</property>
-                                <property name="label" translatable="yes">S</property>
-                                <property name="draw_indicator">True</property>
-                              </object>
-                              <packing>
-                                <property name="position">2</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkCheckButton" id="x_checkbutton2">
-                                <property name="visible">True</property>
-                                <property name="sensitive">False</property>
-                                <property name="can_focus">True</property>
-                                <property name="tooltip-text" translatable="yes">VERBOSE
-    This flag allows you to write regular expressions that look nicer. Whitespace within the pattern is ignored, except when in a character class or preceded by an unescaped backslash, and, when a line contains a '#' neither in a character class or preceded by an unescaped backslash, all characters from the leftmost such '#' through the end of the line are ignored.</property>
-                                <property name="label" translatable="yes">X</property>
-                                <property name="draw_indicator">True</property>
-                              </object>
-                              <packing>
-                                <property name="position">3</property>
-                              </packing>
-                            </child>
+                            <property name="xpad">5</property>
+                            <property name="label" translatable="yes">Double click</property>
                           </object>
                           <packing>
-                            <property name="left_attach">3</property>
-                            <property name="right_attach">4</property>
                             <property name="top_attach">2</property>
                             <property name="bottom_attach">3</property>
                             <property name="x_options">GTK_FILL</property>
@@ -469,15 +249,233 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="flags_label">
+                          <object class="GtkLabel" id="label7">
+                            <property name="width_request">100</property>
                             <property name="visible">True</property>
-                            <property name="tooltip-text" translatable="yes">These flags affect how the regular expression is evaluated.</property>
                             <property name="xpad">5</property>
-                            <property name="label" translatable="yes">Flags</property>
+                            <property name="label" translatable="yes">Single click</property>
                           </object>
                           <packing>
-                            <property name="left_attach">3</property>
-                            <property name="right_attach">4</property>
+                            <property name="top_attach">1</property>
+                            <property name="bottom_attach">2</property>
+                            <property name="x_options">GTK_FILL</property>
+                            <property name="y_options">GTK_FILL</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="label8">
+                            <property name="visible">True</property>
+                            <property name="xpad">5</property>
+                            <property name="label" translatable="yes"> </property>
+                          </object>
+                          <packing>
+                            <property name="x_options">GTK_FILL</property>
+                            <property name="y_options">GTK_FILL</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkComboBox" id="combobox5">
+                            <property name="visible">True</property>
+                            <signal handler="on_combobox_changed" name="changed"/>
+                            <property name="model">model2</property>
+                            <child>
+                              <object class="GtkCellRendererText" id="renderer2"/>
+                              <attributes>
+                                <attribute name="text">0</attribute>
+                              </attributes>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="right_attach">2</property>
+                            <property name="top_attach">5</property>
+                            <property name="bottom_attach">6</property>
+                            <property name="x_options">GTK_FILL</property>
+                            <property name="y_options"/>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkComboBox" id="combobox4">
+                            <property name="visible">True</property>
+                            <signal handler="on_combobox_changed" name="changed"/>
+                            <property name="model">model3</property>
+                            <child>
+                              <object class="GtkCellRendererText" id="renderer3"/>
+                              <attributes>
+                                <attribute name="text">0</attribute>
+                              </attributes>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="right_attach">2</property>
+                            <property name="top_attach">4</property>
+                            <property name="bottom_attach">5</property>
+                            <property name="x_options">GTK_FILL</property>
+                            <property name="y_options"/>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkComboBox" id="combobox3">
+                            <property name="visible">True</property>
+                            <signal handler="on_combobox_changed" name="changed"/>
+                            <property name="model">model4</property>
+                            <child>
+                              <object class="GtkCellRendererText" id="renderer4"/>
+                              <attributes>
+                                <attribute name="text">0</attribute>
+                              </attributes>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="right_attach">2</property>
+                            <property name="top_attach">3</property>
+                            <property name="bottom_attach">4</property>
+                            <property name="x_options">GTK_FILL</property>
+                            <property name="y_options"/>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkComboBox" id="combobox2">
+                            <property name="visible">True</property>
+                            <signal handler="on_combobox_changed" name="changed"/>
+                            <property name="model">model5</property>
+                            <child>
+                              <object class="GtkCellRendererText" id="renderer5"/>
+                              <attributes>
+                                <attribute name="text">0</attribute>
+                              </attributes>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="right_attach">2</property>
+                            <property name="top_attach">2</property>
+                            <property name="bottom_attach">3</property>
+                            <property name="x_options">GTK_FILL</property>
+                            <property name="y_options"/>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkComboBox" id="combobox1">
+                            <property name="width_request">200</property>
+                            <property name="visible">True</property>
+                            <signal handler="on_combobox_changed" name="changed"/>
+                            <property name="model">model6</property>
+                            <child>
+                              <object class="GtkCellRendererText" id="renderer6"/>
+                              <attributes>
+                                <attribute name="text">0</attribute>
+                              </attributes>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="right_attach">2</property>
+                            <property name="top_attach">1</property>
+                            <property name="bottom_attach">2</property>
+                            <property name="x_options">GTK_FILL</property>
+                            <property name="y_options"/>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkEntry" id="entry5">
+                            <property name="visible">True</property>
+                            <property name="sensitive">False</property>
+                            <property name="can_focus">True</property>
+                            <property name="tooltip-text" translatable="yes">Use the Define section below to edit these values.</property>
+                            <property name="editable">False</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">2</property>
+                            <property name="right_attach">3</property>
+                            <property name="top_attach">5</property>
+                            <property name="bottom_attach">6</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkEntry" id="entry4">
+                            <property name="visible">True</property>
+                            <property name="sensitive">False</property>
+                            <property name="can_focus">True</property>
+                            <property name="tooltip-text" translatable="yes">Use the Define section below to edit these values.</property>
+                            <property name="editable">False</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">2</property>
+                            <property name="right_attach">3</property>
+                            <property name="top_attach">4</property>
+                            <property name="bottom_attach">5</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkEntry" id="entry3">
+                            <property name="visible">True</property>
+                            <property name="sensitive">False</property>
+                            <property name="can_focus">True</property>
+                            <property name="tooltip-text" translatable="yes">Use the Define section below to edit these values.</property>
+                            <property name="editable">False</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">2</property>
+                            <property name="right_attach">3</property>
+                            <property name="top_attach">3</property>
+                            <property name="bottom_attach">4</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkEntry" id="entry2">
+                            <property name="visible">True</property>
+                            <property name="sensitive">False</property>
+                            <property name="can_focus">True</property>
+                            <property name="tooltip-text" translatable="yes">Use the Define section below to edit these values.</property>
+                            <property name="editable">False</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">2</property>
+                            <property name="right_attach">3</property>
+                            <property name="top_attach">2</property>
+                            <property name="bottom_attach">3</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkEntry" id="entry1">
+                            <property name="visible">True</property>
+                            <property name="sensitive">False</property>
+                            <property name="can_focus">True</property>
+                            <property name="tooltip-text" translatable="yes">Use the Define section below to edit these values.</property>
+                            <property name="editable">False</property>
+                            <property name="width_chars">50</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">2</property>
+                            <property name="right_attach">3</property>
+                            <property name="top_attach">1</property>
+                            <property name="bottom_attach">2</property>
+                            <property name="y_options">GTK_FILL</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="label9">
+                            <property name="visible">True</property>
+                            <property name="tooltip-text" translatable="yes">Click_Config will select the first match for the regex that includes the clicked location.</property>
+                            <property name="label" translatable="yes">Regular expression</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">2</property>
+                            <property name="right_attach">3</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="label10">
+                            <property name="visible">True</property>
+                            <property name="tooltip-text" translatable="yes">The text selection to make for the given mouse click.</property>
+                            <property name="label" translatable="yes">Selection</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="right_attach">2</property>
                             <property name="x_options">GTK_FILL</property>
                             <property name="y_options">GTK_FILL</property>
                           </packing>
@@ -551,244 +549,81 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="label10">
+                          <object class="GtkLabel" id="flags_label">
                             <property name="visible">True</property>
-                            <property name="tooltip-text" translatable="yes">The text selection to make for the given mouse click.</property>
-                            <property name="label" translatable="yes">Selection</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="right_attach">2</property>
-                            <property name="x_options">GTK_FILL</property>
-                            <property name="y_options">GTK_FILL</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="label9">
-                            <property name="visible">True</property>
-                            <property name="tooltip-text" translatable="yes">Click_Config will select the first match for the regex that includes the clicked location.</property>
-                            <property name="label" translatable="yes">Regular expression</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">2</property>
-                            <property name="right_attach">3</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkEntry" id="entry1">
-                            <property name="visible">True</property>
-                            <property name="sensitive">False</property>
-                            <property name="can_focus">True</property>
-                            <property name="tooltip-text" translatable="yes">Use the Define section below to edit these values.</property>
-                            <property name="editable">False</property>
-                            <property name="width_chars">50</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">2</property>
-                            <property name="right_attach">3</property>
-                            <property name="top_attach">1</property>
-                            <property name="bottom_attach">2</property>
-                            <property name="y_options">GTK_FILL</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkEntry" id="entry2">
-                            <property name="visible">True</property>
-                            <property name="sensitive">False</property>
-                            <property name="can_focus">True</property>
-                            <property name="tooltip-text" translatable="yes">Use the Define section below to edit these values.</property>
-                            <property name="editable">False</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">2</property>
-                            <property name="right_attach">3</property>
-                            <property name="top_attach">2</property>
-                            <property name="bottom_attach">3</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkEntry" id="entry3">
-                            <property name="visible">True</property>
-                            <property name="sensitive">False</property>
-                            <property name="can_focus">True</property>
-                            <property name="tooltip-text" translatable="yes">Use the Define section below to edit these values.</property>
-                            <property name="editable">False</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">2</property>
-                            <property name="right_attach">3</property>
-                            <property name="top_attach">3</property>
-                            <property name="bottom_attach">4</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkEntry" id="entry4">
-                            <property name="visible">True</property>
-                            <property name="sensitive">False</property>
-                            <property name="can_focus">True</property>
-                            <property name="tooltip-text" translatable="yes">Use the Define section below to edit these values.</property>
-                            <property name="editable">False</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">2</property>
-                            <property name="right_attach">3</property>
-                            <property name="top_attach">4</property>
-                            <property name="bottom_attach">5</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkEntry" id="entry5">
-                            <property name="visible">True</property>
-                            <property name="sensitive">False</property>
-                            <property name="can_focus">True</property>
-                            <property name="tooltip-text" translatable="yes">Use the Define section below to edit these values.</property>
-                            <property name="editable">False</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">2</property>
-                            <property name="right_attach">3</property>
-                            <property name="top_attach">5</property>
-                            <property name="bottom_attach">6</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkComboBox" id="combobox1">
-                            <property name="width_request">200</property>
-                            <property name="visible">True</property>
-                            <signal handler="on_combobox_changed" name="changed"/>
-                            <property name="model">model2</property>
-                            <child>
-                              <object class="GtkCellRendererText" id="renderer2"/>
-                              <attributes>
-                                <attribute name="text">0</attribute>
-                              </attributes>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="right_attach">2</property>
-                            <property name="top_attach">1</property>
-                            <property name="bottom_attach">2</property>
-                            <property name="x_options">GTK_FILL</property>
-                            <property name="y_options"/>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkComboBox" id="combobox2">
-                            <property name="visible">True</property>
-                            <signal handler="on_combobox_changed" name="changed"/>
-                            <property name="model">model3</property>
-                            <child>
-                              <object class="GtkCellRendererText" id="renderer3"/>
-                              <attributes>
-                                <attribute name="text">0</attribute>
-                              </attributes>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="right_attach">2</property>
-                            <property name="top_attach">2</property>
-                            <property name="bottom_attach">3</property>
-                            <property name="x_options">GTK_FILL</property>
-                            <property name="y_options"/>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkComboBox" id="combobox3">
-                            <property name="visible">True</property>
-                            <signal handler="on_combobox_changed" name="changed"/>
-                            <property name="model">model4</property>
-                            <child>
-                              <object class="GtkCellRendererText" id="renderer4"/>
-                              <attributes>
-                                <attribute name="text">0</attribute>
-                              </attributes>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="right_attach">2</property>
-                            <property name="top_attach">3</property>
-                            <property name="bottom_attach">4</property>
-                            <property name="x_options">GTK_FILL</property>
-                            <property name="y_options"/>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkComboBox" id="combobox4">
-                            <property name="visible">True</property>
-                            <signal handler="on_combobox_changed" name="changed"/>
-                            <property name="model">model5</property>
-                            <child>
-                              <object class="GtkCellRendererText" id="renderer5"/>
-                              <attributes>
-                                <attribute name="text">0</attribute>
-                              </attributes>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="right_attach">2</property>
-                            <property name="top_attach">4</property>
-                            <property name="bottom_attach">5</property>
-                            <property name="x_options">GTK_FILL</property>
-                            <property name="y_options"/>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkComboBox" id="combobox5">
-                            <property name="visible">True</property>
-                            <signal handler="on_combobox_changed" name="changed"/>
-                            <property name="model">model6</property>
-                            <child>
-                              <object class="GtkCellRendererText" id="renderer6"/>
-                              <attributes>
-                                <attribute name="text">0</attribute>
-                              </attributes>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="right_attach">2</property>
-                            <property name="top_attach">5</property>
-                            <property name="bottom_attach">6</property>
-                            <property name="x_options">GTK_FILL</property>
-                            <property name="y_options"/>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="label8">
-                            <property name="visible">True</property>
+                            <property name="tooltip-text" translatable="yes">These flags affect how the regular expression is evaluated.</property>
                             <property name="xpad">5</property>
-                            <property name="label" translatable="yes"> </property>
+                            <property name="label" translatable="yes">Flags</property>
                           </object>
                           <packing>
+                            <property name="left_attach">3</property>
+                            <property name="right_attach">4</property>
                             <property name="x_options">GTK_FILL</property>
                             <property name="y_options">GTK_FILL</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="label7">
-                            <property name="width_request">100</property>
+                          <object class="GtkHBox" id="flags_hbox2">
                             <property name="visible">True</property>
-                            <property name="xpad">5</property>
-                            <property name="label" translatable="yes">Single click</property>
+                            <property name="tooltip-text" translatable="yes">Use the Define section below to edit these values.</property>
+                            <child>
+                              <object class="GtkCheckButton" id="i_checkbutton2">
+                                <property name="visible">True</property>
+                                <property name="sensitive">False</property>
+                                <property name="can_focus">True</property>
+                                <property name="tooltip-text" translatable="yes">IGNORECASE
+    Perform case-insensitive matching; expressions like [A-Z] will match lowercase letters, too.</property>
+                                <property name="label" translatable="yes">I</property>
+                                <property name="draw_indicator">True</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkCheckButton" id="m_checkbutton2">
+                                <property name="visible">True</property>
+                                <property name="sensitive">False</property>
+                                <property name="can_focus">True</property>
+                                <property name="tooltip-text" translatable="yes">MULTILINE
+    Without this flag, only the current line is searched.
+    When specified, the pattern character '^' matches at the beginning of the string and at the beginning of each line (immediately following each newline); and the pattern character '$' matches at the end of the string and at the end of each line (immediately preceding each newline). By default, '^' matches only at the beginning of the string, and '$' only at the end of the string and immediately before the newline (if any) at the end of the string.</property>
+                                <property name="label" translatable="yes">M</property>
+                                <property name="draw_indicator">True</property>
+                              </object>
+                              <packing>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkCheckButton" id="s_checkbutton2">
+                                <property name="visible">True</property>
+                                <property name="sensitive">False</property>
+                                <property name="can_focus">True</property>
+                                <property name="tooltip-text" translatable="yes">DOTALL
+    Make the '.' special character match any character at all, including a newline; without this flag, '.' will match anything except a newline.</property>
+                                <property name="label" translatable="yes">S</property>
+                                <property name="draw_indicator">True</property>
+                              </object>
+                              <packing>
+                                <property name="position">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkCheckButton" id="x_checkbutton2">
+                                <property name="visible">True</property>
+                                <property name="sensitive">False</property>
+                                <property name="can_focus">True</property>
+                                <property name="tooltip-text" translatable="yes">VERBOSE
+    This flag allows you to write regular expressions that look nicer. Whitespace within the pattern is ignored, except when in a character class or preceded by an unescaped backslash, and, when a line contains a '#' neither in a character class or preceded by an unescaped backslash, all characters from the leftmost such '#' through the end of the line are ignored.</property>
+                                <property name="label" translatable="yes">X</property>
+                                <property name="draw_indicator">True</property>
+                              </object>
+                              <packing>
+                                <property name="position">3</property>
+                              </packing>
+                            </child>
                           </object>
                           <packing>
-                            <property name="top_attach">1</property>
-                            <property name="bottom_attach">2</property>
-                            <property name="x_options">GTK_FILL</property>
-                            <property name="y_options">GTK_FILL</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="label2">
-                            <property name="visible">True</property>
-                            <property name="xpad">5</property>
-                            <property name="label" translatable="yes">Double click</property>
-                          </object>
-                          <packing>
+                            <property name="left_attach">3</property>
+                            <property name="right_attach">4</property>
                             <property name="top_attach">2</property>
                             <property name="bottom_attach">3</property>
                             <property name="x_options">GTK_FILL</property>
@@ -796,12 +631,67 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="label3">
+                          <object class="GtkHBox" id="flags_hbox3">
                             <property name="visible">True</property>
-                            <property name="xpad">5</property>
-                            <property name="label" translatable="yes">Triple click</property>
+                            <property name="tooltip-text" translatable="yes">Use the Define section below to edit these values.</property>
+                            <child>
+                              <object class="GtkCheckButton" id="i_checkbutton3">
+                                <property name="visible">True</property>
+                                <property name="sensitive">False</property>
+                                <property name="can_focus">True</property>
+                                <property name="tooltip-text" translatable="yes">IGNORECASE
+    Perform case-insensitive matching; expressions like [A-Z] will match lowercase letters, too.</property>
+                                <property name="label" translatable="yes">I</property>
+                                <property name="draw_indicator">True</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkCheckButton" id="m_checkbutton3">
+                                <property name="visible">True</property>
+                                <property name="sensitive">False</property>
+                                <property name="can_focus">True</property>
+                                <property name="tooltip-text" translatable="yes">MULTILINE
+    Without this flag, only the current line is searched.
+    When specified, the pattern character '^' matches at the beginning of the string and at the beginning of each line (immediately following each newline); and the pattern character '$' matches at the end of the string and at the end of each line (immediately preceding each newline). By default, '^' matches only at the beginning of the string, and '$' only at the end of the string and immediately before the newline (if any) at the end of the string.</property>
+                                <property name="label" translatable="yes">M</property>
+                                <property name="draw_indicator">True</property>
+                              </object>
+                              <packing>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkCheckButton" id="s_checkbutton3">
+                                <property name="visible">True</property>
+                                <property name="sensitive">False</property>
+                                <property name="can_focus">True</property>
+                                <property name="tooltip-text" translatable="yes">DOTALL
+    Make the '.' special character match any character at all, including a newline; without this flag, '.' will match anything except a newline.</property>
+                                <property name="label" translatable="yes">S</property>
+                                <property name="draw_indicator">True</property>
+                              </object>
+                              <packing>
+                                <property name="position">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkCheckButton" id="x_checkbutton3">
+                                <property name="visible">True</property>
+                                <property name="sensitive">False</property>
+                                <property name="can_focus">True</property>
+                                <property name="tooltip-text" translatable="yes">VERBOSE
+    This flag allows you to write regular expressions that look nicer. Whitespace within the pattern is ignored, except when in a character class or preceded by an unescaped backslash, and, when a line contains a '#' neither in a character class or preceded by an unescaped backslash, all characters from the leftmost such '#' through the end of the line are ignored.</property>
+                                <property name="label" translatable="yes">X</property>
+                                <property name="draw_indicator">True</property>
+                              </object>
+                              <packing>
+                                <property name="position">3</property>
+                              </packing>
+                            </child>
                           </object>
                           <packing>
+                            <property name="left_attach">3</property>
+                            <property name="right_attach">4</property>
                             <property name="top_attach">3</property>
                             <property name="bottom_attach">4</property>
                             <property name="x_options">GTK_FILL</property>
@@ -809,12 +699,67 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="label4">
+                          <object class="GtkHBox" id="flags_hbox4">
                             <property name="visible">True</property>
-                            <property name="xpad">5</property>
-                            <property name="label" translatable="yes">Quadruple click</property>
+                            <property name="tooltip-text" translatable="yes">Use the Define section below to edit these values.</property>
+                            <child>
+                              <object class="GtkCheckButton" id="i_checkbutton4">
+                                <property name="visible">True</property>
+                                <property name="sensitive">False</property>
+                                <property name="can_focus">True</property>
+                                <property name="tooltip-text" translatable="yes">IGNORECASE
+    Perform case-insensitive matching; expressions like [A-Z] will match lowercase letters, too.</property>
+                                <property name="label" translatable="yes">I</property>
+                                <property name="draw_indicator">True</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkCheckButton" id="m_checkbutton4">
+                                <property name="visible">True</property>
+                                <property name="sensitive">False</property>
+                                <property name="can_focus">True</property>
+                                <property name="tooltip-text" translatable="yes">MULTILINE
+    Without this flag, only the current line is searched.
+    When specified, the pattern character '^' matches at the beginning of the string and at the beginning of each line (immediately following each newline); and the pattern character '$' matches at the end of the string and at the end of each line (immediately preceding each newline). By default, '^' matches only at the beginning of the string, and '$' only at the end of the string and immediately before the newline (if any) at the end of the string.</property>
+                                <property name="label" translatable="yes">M</property>
+                                <property name="draw_indicator">True</property>
+                              </object>
+                              <packing>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkCheckButton" id="s_checkbutton4">
+                                <property name="visible">True</property>
+                                <property name="sensitive">False</property>
+                                <property name="can_focus">True</property>
+                                <property name="tooltip-text" translatable="yes">DOTALL
+    Make the '.' special character match any character at all, including a newline; without this flag, '.' will match anything except a newline.</property>
+                                <property name="label" translatable="yes">S</property>
+                                <property name="draw_indicator">True</property>
+                              </object>
+                              <packing>
+                                <property name="position">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkCheckButton" id="x_checkbutton4">
+                                <property name="visible">True</property>
+                                <property name="sensitive">False</property>
+                                <property name="can_focus">True</property>
+                                <property name="tooltip-text" translatable="yes">VERBOSE
+    This flag allows you to write regular expressions that look nicer. Whitespace within the pattern is ignored, except when in a character class or preceded by an unescaped backslash, and, when a line contains a '#' neither in a character class or preceded by an unescaped backslash, all characters from the leftmost such '#' through the end of the line are ignored.</property>
+                                <property name="label" translatable="yes">X</property>
+                                <property name="draw_indicator">True</property>
+                              </object>
+                              <packing>
+                                <property name="position">3</property>
+                              </packing>
+                            </child>
                           </object>
                           <packing>
+                            <property name="left_attach">3</property>
+                            <property name="right_attach">4</property>
                             <property name="top_attach">4</property>
                             <property name="bottom_attach">5</property>
                             <property name="x_options">GTK_FILL</property>
@@ -822,12 +767,67 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="label5">
+                          <object class="GtkHBox" id="flags_hbox5">
                             <property name="visible">True</property>
-                            <property name="xpad">5</property>
-                            <property name="label" translatable="yes">Quintuple click</property>
+                            <property name="tooltip-text" translatable="yes">Use the Define section below to edit these values.</property>
+                            <child>
+                              <object class="GtkCheckButton" id="i_checkbutton5">
+                                <property name="visible">True</property>
+                                <property name="sensitive">False</property>
+                                <property name="can_focus">True</property>
+                                <property name="tooltip-text" translatable="yes">IGNORECASE
+    Perform case-insensitive matching; expressions like [A-Z] will match lowercase letters, too.</property>
+                                <property name="label" translatable="yes">I</property>
+                                <property name="draw_indicator">True</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkCheckButton" id="m_checkbutton5">
+                                <property name="visible">True</property>
+                                <property name="sensitive">False</property>
+                                <property name="can_focus">True</property>
+                                <property name="tooltip-text" translatable="yes">MULTILINE
+    Without this flag, only the current line is searched.
+    When specified, the pattern character '^' matches at the beginning of the string and at the beginning of each line (immediately following each newline); and the pattern character '$' matches at the end of the string and at the end of each line (immediately preceding each newline). By default, '^' matches only at the beginning of the string, and '$' only at the end of the string and immediately before the newline (if any) at the end of the string.</property>
+                                <property name="label" translatable="yes">M</property>
+                                <property name="draw_indicator">True</property>
+                              </object>
+                              <packing>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkCheckButton" id="s_checkbutton5">
+                                <property name="visible">True</property>
+                                <property name="sensitive">False</property>
+                                <property name="can_focus">True</property>
+                                <property name="tooltip-text" translatable="yes">DOTALL
+    Make the '.' special character match any character at all, including a newline; without this flag, '.' will match anything except a newline.</property>
+                                <property name="label" translatable="yes">S</property>
+                                <property name="draw_indicator">True</property>
+                              </object>
+                              <packing>
+                                <property name="position">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkCheckButton" id="x_checkbutton5">
+                                <property name="visible">True</property>
+                                <property name="sensitive">False</property>
+                                <property name="can_focus">True</property>
+                                <property name="tooltip-text" translatable="yes">VERBOSE
+    This flag allows you to write regular expressions that look nicer. Whitespace within the pattern is ignored, except when in a character class or preceded by an unescaped backslash, and, when a line contains a '#' neither in a character class or preceded by an unescaped backslash, all characters from the leftmost such '#' through the end of the line are ignored.</property>
+                                <property name="label" translatable="yes">X</property>
+                                <property name="draw_indicator">True</property>
+                              </object>
+                              <packing>
+                                <property name="position">3</property>
+                              </packing>
+                            </child>
                           </object>
                           <packing>
+                            <property name="left_attach">3</property>
+                            <property name="right_attach">4</property>
                             <property name="top_attach">5</property>
                             <property name="bottom_attach">6</property>
                             <property name="x_options">GTK_FILL</property>
@@ -869,96 +869,32 @@
                       <placeholder/>
                     </child>
                     <child>
-                      <object class="GtkHButtonBox" id="hbuttonbox3">
+                      <object class="GtkComboBoxEntry" id="define_comboboxentry">
+                        <property name="width_request">200</property>
                         <property name="visible">True</property>
-                        <property name="spacing">5</property>
-                        <property name="layout_style">GTK_BUTTONBOX_END</property>
-                        <child>
-                          <object class="GtkButton" id="define_add_button">
+                        <property name="tooltip-text" translatable="yes">Select a type of text selection that you would like to edit.</property>
+                        <signal handler="on_define_comboboxentry_changed" name="changed"/>
+                        <child internal-child="entry">
+                          <object class="GtkEntry" id="define_name_entry">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="label" translatable="yes">gtk-add</property>
-                            <property name="use_stock">True</property>
-                            <signal handler="on_define_add_button_clicked" name="clicked"/>
+                            <property name="tooltip-text" translatable="yes">Enter (or edit) a name for a type of text selection you want to add.</property>
+                            <signal handler="on_define_name_entry_key_press_event" name="key_press_event"/>
                           </object>
                         </child>
+                        <property name="model">model7</property>
                         <child>
-                          <object class="GtkButton" id="define_remove_button">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="label" translatable="yes">gtk-remove</property>
-                            <property name="use_stock">True</property>
-                            <signal handler="on_define_remove_button_clicked" name="clicked"/>
-                          </object>
-                          <packing>
-                            <property name="position">1</property>
-                          </packing>
+                          <object class="GtkCellRendererText" id="renderer7"/>
+                          <attributes>
+                            <attribute name="text">0</attribute>
+                          </attributes>
                         </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="right_attach">2</property>
-                        <property name="top_attach">1</property>
-                        <property name="bottom_attach">2</property>
-                        <property name="x_options">GTK_FILL</property>
-                        <property name="y_options">GTK_FILL</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkHBox" id="hbox3">
-                        <property name="visible">True</property>
-                        <child>
-                          <placeholder/>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left_attach">3</property>
-                        <property name="right_attach">4</property>
-                        <property name="top_attach">1</property>
-                        <property name="bottom_attach">2</property>
-                        <property name="x_options">GTK_FILL</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkHBox" id="hbox1">
-                        <property name="visible">True</property>
-                        <child>
-                          <placeholder/>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="top_attach">1</property>
-                        <property name="bottom_attach">2</property>
-                        <property name="x_options">GTK_FILL</property>
-                        <property name="y_options">GTK_FILL</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="label6">
-                        <property name="width_request">100</property>
-                        <property name="visible">True</property>
-                        <property name="xpad">5</property>
-                        <property name="label" translatable="yes">Selection</property>
-                      </object>
-                      <packing>
-                        <property name="x_options">GTK_FILL</property>
-                        <property name="y_options">GTK_FILL</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkEntry" id="define_regex_entry">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="tooltip-text" translatable="yes">Enter (or edit) a regular expression here that describes the kind of text item you want to select.</property>
-                        <signal handler="on_define_regex_entry_changed" name="changed"/>
-                        <signal handler="on_define_regex_entry_key_press_event" name="key_press_event"/>
-                      </object>
-                      <packing>
-                        <property name="left_attach">2</property>
-                        <property name="right_attach">3</property>
-                        <property name="y_options">GTK_FILL</property>
+                        <property name="x_options">GTK_SHRINK | GTK_FILL</property>
+                        <property name="y_options"/>
                       </packing>
                     </child>
                     <child>
@@ -1027,32 +963,96 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBoxEntry" id="define_comboboxentry">
-                        <property name="width_request">200</property>
+                      <object class="GtkEntry" id="define_regex_entry">
                         <property name="visible">True</property>
-                        <property name="tooltip-text" translatable="yes">Select a type of text selection that you would like to edit.</property>
-                        <signal handler="on_define_comboboxentry_changed" name="changed"/>
-                        <child internal-child="entry">
-                          <object class="GtkEntry" id="define_name_entry">
+                        <property name="can_focus">True</property>
+                        <property name="tooltip-text" translatable="yes">Enter (or edit) a regular expression here that describes the kind of text item you want to select.</property>
+                        <signal handler="on_define_regex_entry_changed" name="changed"/>
+                        <signal handler="on_define_regex_entry_key_press_event" name="key_press_event"/>
+                      </object>
+                      <packing>
+                        <property name="left_attach">2</property>
+                        <property name="right_attach">3</property>
+                        <property name="y_options">GTK_FILL</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label6">
+                        <property name="width_request">100</property>
+                        <property name="visible">True</property>
+                        <property name="xpad">5</property>
+                        <property name="label" translatable="yes">Selection</property>
+                      </object>
+                      <packing>
+                        <property name="x_options">GTK_FILL</property>
+                        <property name="y_options">GTK_FILL</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkHBox" id="hbox1">
+                        <property name="visible">True</property>
+                        <child>
+                          <placeholder/>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="top_attach">1</property>
+                        <property name="bottom_attach">2</property>
+                        <property name="x_options">GTK_FILL</property>
+                        <property name="y_options">GTK_FILL</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkHBox" id="hbox3">
+                        <property name="visible">True</property>
+                        <child>
+                          <placeholder/>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">3</property>
+                        <property name="right_attach">4</property>
+                        <property name="top_attach">1</property>
+                        <property name="bottom_attach">2</property>
+                        <property name="x_options">GTK_FILL</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkHButtonBox" id="hbuttonbox3">
+                        <property name="visible">True</property>
+                        <property name="spacing">5</property>
+                        <property name="layout_style">GTK_BUTTONBOX_END</property>
+                        <child>
+                          <object class="GtkButton" id="define_add_button">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="tooltip-text" translatable="yes">Enter (or edit) a name for a type of text selection you want to add.</property>
-                            <signal handler="on_define_name_entry_key_press_event" name="key_press_event"/>
+                            <property name="receives_default">True</property>
+                            <property name="label" translatable="yes">gtk-add</property>
+                            <property name="use_stock">True</property>
+                            <signal handler="on_define_add_button_clicked" name="clicked"/>
                           </object>
                         </child>
-                        <property name="model">model7</property>
                         <child>
-                          <object class="GtkCellRendererText" id="renderer7"/>
-                          <attributes>
-                            <attribute name="text">0</attribute>
-                          </attributes>
+                          <object class="GtkButton" id="define_remove_button">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="label" translatable="yes">gtk-remove</property>
+                            <property name="use_stock">True</property>
+                            <signal handler="on_define_remove_button_clicked" name="clicked"/>
+                          </object>
+                          <packing>
+                            <property name="position">1</property>
+                          </packing>
                         </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="right_attach">2</property>
-                        <property name="x_options">GTK_SHRINK | GTK_FILL</property>
-                        <property name="y_options"/>
+                        <property name="top_attach">1</property>
+                        <property name="bottom_attach">2</property>
+                        <property name="x_options">GTK_FILL</property>
+                        <property name="y_options">GTK_FILL</property>
                       </packing>
                     </child>
                   </object>
@@ -1096,45 +1096,14 @@
                         <property name="n_columns">3</property>
                         <property name="column_spacing">5</property>
                         <child>
-                          <object class="GtkLabel" id="label17">
-                            <property name="visible">True</property>
-                            <property name="label" translatable="yes">Gedit built-in</property>
-                          </object>
-                          <packing>
-                            <property name="y_options">GTK_FILL</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="label16">
-                            <property name="visible">True</property>
-                            <property name="label" translatable="yes">Click Config default</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="right_attach">2</property>
-                            <property name="y_options">GTK_FILL</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="label15">
-                            <property name="visible">True</property>
-                            <property name="label" translatable="yes">Custom</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">2</property>
-                            <property name="right_attach">3</property>
-                            <property name="y_options">GTK_FILL</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkScrolledWindow" id="scrolledwindow7">
+                          <object class="GtkScrolledWindow" id="scrolledwindow5">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
                             <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
                             <property name="shadow_type">GTK_SHADOW_IN</property>
                             <child>
-                              <object class="GtkTreeView" id="treeview7">
+                              <object class="GtkTreeView" id="treeview5">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="headers_clickable">True</property>
@@ -1142,6 +1111,8 @@
                             </child>
                           </object>
                           <packing>
+                            <property name="left_attach">2</property>
+                            <property name="right_attach">3</property>
                             <property name="top_attach">1</property>
                             <property name="bottom_attach">2</property>
                           </packing>
@@ -1169,14 +1140,14 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkScrolledWindow" id="scrolledwindow5">
+                          <object class="GtkScrolledWindow" id="scrolledwindow7">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
                             <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
                             <property name="shadow_type">GTK_SHADOW_IN</property>
                             <child>
-                              <object class="GtkTreeView" id="treeview5">
+                              <object class="GtkTreeView" id="treeview7">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="headers_clickable">True</property>
@@ -1184,10 +1155,39 @@
                             </child>
                           </object>
                           <packing>
-                            <property name="left_attach">2</property>
-                            <property name="right_attach">3</property>
                             <property name="top_attach">1</property>
                             <property name="bottom_attach">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="label15">
+                            <property name="visible">True</property>
+                            <property name="label" translatable="yes">Custom</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">2</property>
+                            <property name="right_attach">3</property>
+                            <property name="y_options">GTK_FILL</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="label16">
+                            <property name="visible">True</property>
+                            <property name="label" translatable="yes">Click Config default</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="right_attach">2</property>
+                            <property name="y_options">GTK_FILL</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="label17">
+                            <property name="visible">True</property>
+                            <property name="label" translatable="yes">Gedit built-in</property>
+                          </object>
+                          <packing>
+                            <property name="y_options">GTK_FILL</property>
                           </packing>
                         </child>
                       </object>
@@ -1294,7 +1294,6 @@
                         <property name="can_focus">True</property>
                         <property name="has_focus">True</property>
                         <property name="can_default">True</property>
-                        <property name="has_default">True</property>
                         <property name="receives_default">True</property>
                         <property name="tooltip-text" translatable="yes">Apply any changes made and close this window.</property>
                         <property name="label" translatable="yes">gtk-ok</property>
