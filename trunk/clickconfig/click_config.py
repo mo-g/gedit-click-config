@@ -59,16 +59,16 @@ class ClickConfigPlugin(gedit.Plugin):
     deactivate -- Gedit calls this to stop the plugin.
     update_ui -- Gedit calls this at certain times when the ui changes.
     is_configurable -- Gedit calls this to check if the plugin is configurable.
-    create_configure_dialog -- Gedit calls this to when "Configure" is selected
-                               in the Preferences Plugins tab.
+    create_configure_dialog -- Gedit calls this when "Configure" is selected in
+                               the Preferences Plugins tab.
                                Also, ClickConfigWindowHelper calls this when
                                Edit > Click Config > Configure is selected.
     update_configuration -- The ConfigUI object calls this when Apply or OK is
                             clicked on the configuration window.
-    open_config_dir -- Open a Nautilus window of the configuration file's
+    open_config_dir -- Opens a Nautilus window of the configuration file's
                        directory.  This is called by the ConfigUI object when
                        the Browse button is clicked.
-    get_gedit_window -- Return the current Gedit window.
+    get_gedit_window -- Returns the current Gedit window.
     
     """
     
@@ -224,9 +224,12 @@ class ClickConfigPlugin(gedit.Plugin):
         Return the current Gedit window.
         ConfigUI uses this to identify its parent window.
         """
+        self.log()
         return gedit.app_get_default().get_active_window()
     
     def _get_languages(self):
+        """Return a list of the languages known to Gedit."""
+        self.log()
         gtk_lang_mgr = gtksourceview2.language_manager_get_default()
         language_ids = gtk_lang_mgr.get_language_ids()
         language_names = []
@@ -238,6 +241,8 @@ class ClickConfigPlugin(gedit.Plugin):
         return language_names
     
     def _get_languages_by_section(self):
+        """Return a dictionary of the languages known to Gedit, grouped."""
+        self.log()
         gtk_lang_mgr = gtksourceview2.language_manager_get_default()
         language_ids = gtk_lang_mgr.get_language_ids()
         languages_by_section = {}
@@ -444,8 +449,6 @@ class ClickConfigWindowHelper(object):
         and .get_active_view() only gets the first one.  So it's necessary to
         get the active tab and then drill down to get its view(s), so that a
         mouse handler can be attached to each.
-        Unfortunately, no signal is sent when the split views are created, but
-        switching tabs will trigger update_ui.
         """
         self._plugin.log()
         doc = self._window.get_active_document()
@@ -516,7 +519,7 @@ class ClickConfigWindowHelper(object):
         return False
     
     def _connect_view(self, view):
-        """Set default position for the view and connect the mouse handler."""
+        """Connect the mouse handler to the view."""
         self._plugin.log()
         self._plugin.logger.debug('View: %s' % view)
         if view not in self._mouse_handler_ids_per_view:
@@ -549,16 +552,8 @@ class ClickConfigWindowHelper(object):
     
     def _handle_button_press(self, view, event):
         """
-        Get text position iterator based on mouse pointer at time of event.
-        This avoids the problem of the insertion point moving during
-        intermediate clicked selections.  So, for example, a paragraph can be
-        selected by triple-click and then a line within it selected by the
-        quadruple-click.  Otherwise, the selected line would always be the
-        first line of the paragraph if using get_insert().
-        The single-click stores this value for the succeeding multi-clicks.
-
-        Since menu items use this value, it should be converted to a mark
-        to maintain stability across multiple views and buffer changes.
+        Evaluate mouse click and call for text selection as appropriate.
+        Return False if the click should still be handled afterwards.
         """
         self._plugin.log()
         handled = False
@@ -641,7 +636,7 @@ class ClickConfigWindowHelper(object):
         """Return the current cursor location based on the click location."""
         self._plugin.log()
         buffer_x, buffer_y = view.window_to_buffer_coords(
-                        event.window.get_window_type(),
+                        view.get_window_type(event.window),
                         int(event.x),
                         int(event.y))
         event_iter = view.get_iter_at_location(buffer_x, buffer_y)
