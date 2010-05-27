@@ -31,6 +31,9 @@ ConfigUI -- The Click_Config plugin creates one object of this class when the
 In addition to the imported modules, this module requires:
 Click_Config.xml -- configuration GUI layout converted from Click_Config.glade
 
+2010-05-26  for Click Config version 1.1.2
+    Fixed Issue #4 in ConfigUI._update_config_display.
+
 """
 
 import os
@@ -469,6 +472,9 @@ class ConfigUI(object):
         op_names = self._mod_conf.get_op_names()
         for click in range(1, 6):
             combobox = self.builder.get_object('combobox%d' % click)
+            # As of GTK+ 2.20, the widget name does not automatically equal the
+            # widget id, so I have to set it here to let it work as before.
+            combobox.set_name('combobox%d' % click)
             self._fill_combobox(combobox, op_names)
             op_name = self._mod_conf.get_op(click=click).name
             self._set_combobox_op(combobox, op_name)
