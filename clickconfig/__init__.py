@@ -19,8 +19,8 @@
 """
 Click_Config plugin package
 
-2010-01-25
-Version 1.1
+2010-09-20
+Version 1.2.0
 
 Description:
 This plugin provides configurable text selections based on single or multiple

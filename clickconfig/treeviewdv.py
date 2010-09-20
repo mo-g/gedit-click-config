@@ -63,7 +63,6 @@ TreeViewDV -- This can be used in place of a gtk.TreeView.
 """
 
 import logging
-import logging.handlers
 import os
 import sys
 

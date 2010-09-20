@@ -33,6 +33,8 @@ import shutil
 import sys
 
 from .dictfile import read_dict_from_file, write_dict_to_file
+from .logger import Logger
+LOGGER = Logger(level=('DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL')[2])
 
 class SelectionOp(object):
     
@@ -54,6 +56,8 @@ class SelectionOp(object):
         Define a new SelectionOp from a name, a regex pattern, and regex flags
         or from a dictionary with keys 'name', 'pattern', and 'flags'.
         """
+        LOGGER.log()
+        
         self.name = ''
         """Name of the SelectionOp."""
         
@@ -78,6 +82,7 @@ class SelectionOp(object):
     
     def copy_as(self, name):
         """Return a copy of the SelectionOp with a new name."""
+        LOGGER.log()
         new = self.copy()
         new.name = name
         new.preserved = False
@@ -85,6 +90,7 @@ class SelectionOp(object):
     
     def copy(self, memo=None):
         """Return a deep copy of the SelectionOp."""
+        LOGGER.log()
         return SelectionOp(
             self.name,
             self.pattern,
@@ -94,22 +100,27 @@ class SelectionOp(object):
     
     def __copy__(self):
         """Return a copy. (For use by the copy module.)"""
+        LOGGER.log()
         return self.copy()
     
     def __deepcopy__(self, memo=None):
         """Return a deep copy. (For use by the copy module.)"""
+        LOGGER.log()
         return self.copy(memo)
     
     def __str__(self):
         """Return a string representation of this object."""
+        LOGGER.log()
         return self.__repr__()
     
     def __repr__(self):
         """Return a string representation of this object."""
+        LOGGER.log()
         return repr(self.to_dict())
     
     def __eq__(self, op):
         """Return True if equal to the other SelectionOp."""
+        LOGGER.log()
         is_equal = (
             self.name == op.name and
             self.pattern == op.pattern and
@@ -120,10 +131,12 @@ class SelectionOp(object):
     
     def __ne__(self, op):
         """Return True if not equal to the other SelectionOp."""
+        LOGGER.log()
         return not self.__eq__(op)
     
     def to_dict(self):
         """Return a dictionary representing this object."""
+        LOGGER.log()
         return {
             'name': self.name,
             'pattern': self.pattern,
@@ -133,6 +146,7 @@ class SelectionOp(object):
     
     def from_dict(self, dictionary):
         """Read from a dictionary representing this object."""
+        LOGGER.log()
         self.name = dictionary['name']
         self.pattern = dictionary['pattern']
         self.flags = dictionary['flags']
@@ -157,6 +171,7 @@ class ConfigSet(object):
         Define a new ConfigSet from a name and a list of SelectionOp names
         or from a dictionary with keys 'name' and 'op_names'.
         """
+        LOGGER.log()
         self.name = ''
         """Name of the ConfigSet."""
         
@@ -177,6 +192,7 @@ class ConfigSet(object):
         
     def copy_as(self, name):
         """Return a copy of the ConfigSet with a new name."""
+        LOGGER.log()
         new = self.copy()
         new.name = name
         new.preserved = False
@@ -184,6 +200,7 @@ class ConfigSet(object):
     
     def copy(self, memo=None):
         """Return a deep copy of the ConfigSet."""
+        LOGGER.log()
         return ConfigSet(
             self.name,
             self.op_names[:],
@@ -192,22 +209,27 @@ class ConfigSet(object):
     
     def __copy__(self):
         """Return a copy. (For use by the copy module.)"""
+        LOGGER.log()
         return self.copy()
     
     def __deepcopy__(self, memo=None):
         """Return a deep copy. (For use by the copy module.)"""
+        LOGGER.log()
         return self.copy(memo)
     
     def __str__(self):
         """Return a string representation of this object."""
+        LOGGER.log()
         return self.__repr__()
     
     def __repr__(self):
         """Return a string representation of this object."""
+        LOGGER.log()
         return repr(self.to_dict())
     
     def __eq__(self, configset):
         """Return True if equal to the other ConfigSet."""
+        LOGGER.log()
         is_equal = (
             self.name == configset.name and
             self.op_names == configset.op_names and
@@ -217,10 +239,12 @@ class ConfigSet(object):
     
     def __ne__(self, configset):
         """Return True if not equal to the other ConfigSet."""
+        LOGGER.log()
         return not self.__eq__(configset)
     
     def to_dict(self):
         """Return a dictionary representing this object."""
+        LOGGER.log()
         return {
             'name': self.name,
             'op_names': self.op_names,
@@ -229,6 +253,7 @@ class ConfigSet(object):
     
     def from_dict(self, dictionary):
         """Read from a dictionary representing this object."""
+        LOGGER.log()
         self.name = dictionary['name']
         self.op_names = dictionary['op_names']
         self.preserved = dictionary['preserved']
@@ -253,9 +278,9 @@ class Config(object):
     
     def __init__(self, plugin):
         """Start empty configuration."""
+        LOGGER.log()
         
         self._plugin = plugin
-        self._plugin.log()
         
         self.current_configset_name = ''
         """Name of the current ConfigSet."""
@@ -297,7 +322,7 @@ class Config(object):
     
     def copy(self, memo=None):
         """Return a (deep) copy of the Config."""
-        self._plugin.log()
+        LOGGER.log()
         # cannot return copy.deepcopy(self)
         # because copy.deepcopy cannot deepcopy the plugin reference.
         new = Config(self._plugin)
@@ -315,25 +340,27 @@ class Config(object):
     
     def __copy__(self):
         """Return a copy. (For use by the copy module.)"""
-        self._plugin.log()
+        LOGGER.log()
         return self.copy()
     
     def __deepcopy__(self, memo=None):
         """Return a deep copy. (For use by the copy module.)"""
-        self._plugin.log()
+        LOGGER.log()
         return self.copy(memo)
     
     def __str__(self):
         """Return a string representation of this object."""
+        LOGGER.log()
         return self.__repr__()
     
     def __repr__(self):
         """Return a string representation of this object."""
+        LOGGER.log()
         return repr(self.to_dict())
     
     def __eq__(self, config):
         """Return True if equal to the other Config."""
-        self._plugin.log()
+        LOGGER.log()
         if len(self.ops) != len(config.ops):
             return False
         for i in range(len(self.ops)):
@@ -354,12 +381,12 @@ class Config(object):
     
     def __ne__(self, config):
         """Return True if not equal to the other Config."""
-        self._plugin.log()
+        LOGGER.log()
         return not self.__eq__(config)
     
     def to_dict(self):
         """Return a dictionary representing this object."""
-        self._plugin.log()
+        LOGGER.log()
         return {
             'current_configset_name': self.current_configset_name,
             'current_op_name': self.current_op_name,
@@ -374,7 +401,7 @@ class Config(object):
     
     def from_dict(self, dictionary):
         """Read from a dictionary representing this object."""
-        self._plugin.log()
+        LOGGER.log()
         self.current_configset_name = dictionary['current_configset_name']
         self.current_op_name = dictionary['current_op_name']
         self.configsets = \
@@ -396,7 +423,7 @@ class Config(object):
     
     def partial_from_dict(self, dictionary):
         """Read from a dictionary representing this object."""
-        self._plugin.log()
+        LOGGER.log()
         if 'configsets' in dictionary:
             for dict_ in dictionary['configsets']:
                 configset = ConfigSet(dict_)
@@ -413,6 +440,7 @@ class Config(object):
         If any languages are assigned to a non-existent ConfigSet, assign them
         to the default ConfigSet.
         """
+        LOGGER.log()
         default_configset_name = 'Click_Config default'
         # Make sure we have all of the languages.
         for language in self._plugin._get_languages():
@@ -429,7 +457,7 @@ class Config(object):
     
     def add_configset(self, configset):
         """Add a ConfigSet to the configsets."""
-        self._plugin.log()
+        LOGGER.log()
         configset_name = configset.name
         configset_names = [item.name for item in self.configsets]
         if configset_name in configset_names:
@@ -440,7 +468,7 @@ class Config(object):
     
     def remove_configset(self, configset):
         """Remove a ConfigSet from the configsets."""
-        self._plugin.log()
+        LOGGER.log()
         self.configsets.remove(configset)
     
     def get_configset(self, configset_name=None):
@@ -448,7 +476,7 @@ class Config(object):
         Return the ConfigSet with this name,
         or return the current ConfigSet if no name is given.
         """
-        self._plugin.log()
+        LOGGER.log()
         configset_name = configset_name or self.current_configset_name
         for item in self.configsets:
             if item.name == configset_name:
@@ -464,7 +492,7 @@ class Config(object):
                 configset
             or  configset_name
         """
-        self._plugin.log()
+        LOGGER.log()
         if configset:
             self.add_configset(configset)
             configset_name = configset.name
@@ -472,7 +500,7 @@ class Config(object):
     
     def get_configset_names(self):
         """Return a list of the ConfigSet names."""
-        self._plugin.log()
+        LOGGER.log()
         configset_names = [item.name for item in self.configsets]
         configset_names = configset_names[0:2] + sorted(configset_names[2:])
         return configset_names
@@ -481,7 +509,7 @@ class Config(object):
     
     def add_op(self, op):
         """Add a SelectionOp to the ops."""
-        self._plugin.log()
+        LOGGER.log()
         op_name = op.name
         op_names = [item.name for item in self.ops]
         if op_name in op_names:
@@ -492,7 +520,7 @@ class Config(object):
     
     def remove_op(self, op_or_op_name):
         """Remove a SelectionOp from the ops."""
-        self._plugin.log()
+        LOGGER.log()
         if isinstance(op_or_op_name, str):
             op_name = op_or_op_name
             op = self.get_op(op_name=op_name)
@@ -514,7 +542,7 @@ class Config(object):
                       or  click (will use current ConfigSet)
         Otherwise, returns the current SelectionOp (of the Define section).
         """
-        self._plugin.log()
+        LOGGER.log()
         if not op_name:
             if click:
                 configset = (configset or
@@ -544,7 +572,7 @@ class Config(object):
             or  click (will use current ConfigSet)
         Otherwise, sets the current SelectionOp (of the Define section).
         """
-        self._plugin.log()
+        LOGGER.log()
         if op:
             self.add_op(op)
             op_name = op.name
@@ -558,7 +586,7 @@ class Config(object):
     
     def get_op_names(self):
         """Return a list of the SelectionOp names."""
-        self._plugin.log()
+        LOGGER.log()
         op_names = [op.name for op in self.ops]
         op_names = op_names[0:1] + sorted(op_names[1:])
         return op_names
@@ -582,7 +610,7 @@ class Config(object):
             or  click (will use current ConfigSet)
         Otherwise, returns pattern from the current op (of the Define section).
         """
-        self._plugin.log()
+        LOGGER.log()
         op = op or self.get_op(op_name, click, configset_name, configset)
         pattern = op.pattern
         return pattern
@@ -604,7 +632,7 @@ class Config(object):
             or  click (will use current ConfigSet)
         Otherwise, returns flags from the current op (of the Define section).
         """
-        self._plugin.log()
+        LOGGER.log()
         op = op or self.get_op(op_name, click, configset_name, configset)
         flags = op.flags
         return flags
@@ -629,7 +657,7 @@ class Config(object):
             or  click (will use current ConfigSet)
         Otherwise, sets the pattern for the current op (of the Define section).
         """
-        self._plugin.log()
+        LOGGER.log()
         op = op or self.get_op(op_name, click, configset_name, configset)
         index = self.ops.index(op)
         self.ops[index].pattern = pattern
@@ -654,7 +682,7 @@ class Config(object):
             or  click (will use current ConfigSet)
         Otherwise, sets the flags for the current op (of the Define section).
         """
-        self._plugin.log()
+        LOGGER.log()
         op = op or self.get_op(op_name, click, configset_name, configset)
         index = self.ops.index(op)
         self.ops[index].flags = flags
@@ -663,13 +691,13 @@ class Config(object):
     
     def load(self):
         """Load the configuration."""
-        self._plugin.log()
+        LOGGER.log()
         config_dict = read_dict_from_file(self.filename)
         self.from_dict(config_dict)
     
     def save(self):
         """Save the configuration."""
-        self._plugin.log()
+        LOGGER.log()
         config_dict = self.to_dict()
         if os.path.exists(self.filename):
             shutil.copy2(self.filename, self.filename + '~')
@@ -677,7 +705,7 @@ class Config(object):
     
     def import_file(self, filename):
         """Import from a configuration file."""
-        self._plugin.log()
+        LOGGER.log()
         config_dict = read_dict_from_file(filename)
         self.partial_from_dict(config_dict)
     
