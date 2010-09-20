@@ -43,6 +43,8 @@ import sys
 import gtk
 
 from treeviewdv import TreeViewDV
+from .logger import Logger
+LOGGER = Logger(level=('DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL')[2])
 
 class ConfigUI(object):
     
@@ -66,7 +68,7 @@ class ConfigUI(object):
         4. Connect the event handlers.
         """
         self._plugin = plugin
-        self._plugin.log()
+        LOGGER.log()
         
         # 1. Create the window.
         glade_file = os.path.join(self._plugin.plugin_path, 'Click_Config.xml')
@@ -151,7 +153,7 @@ class ConfigUI(object):
             'configure-event',
             self.on_config_window_configure_event)
         
-        self._plugin.log('Configuration window opened.')
+        LOGGER.log('Configuration window opened.')
         
         
     ### 1 - General configure window
@@ -163,7 +165,7 @@ class ConfigUI(object):
         Set configuration window height and sizing constraint.
         This event handler is connected by on_lang_checkbutton_toggled.
         """
-        self._plugin.log()
+        LOGGER.log()
         window = widget
         window.disconnect(self.on_config_window_configure_handler_id)
         width, height = window.get_size()
@@ -178,8 +180,8 @@ class ConfigUI(object):
     
     def on_config_window_destroy(self, event):
         """Let the ClickConfigPlugin know that the ConfigUI is gone."""
-        self._plugin.log()
-        self._plugin.log('Configuration window closed.')
+        LOGGER.log()
+        LOGGER.log('Configuration window closed.')
         self._plugin.config_ui = None
         return False
     
@@ -187,7 +189,7 @@ class ConfigUI(object):
         """
         Give the ClickConfigPlugin the modified configuration, then close.
         """
-        self._plugin.log()
+        LOGGER.log()
         width, height = self.window.get_size()
         self._mod_conf.window_width = width
         if self._mod_conf.is_set_by_language:
@@ -200,23 +202,23 @@ class ConfigUI(object):
     
     def on_Apply_button_clicked(self, button):
         """Give the ClickConfigPlugin the modified configuration."""
-        self._plugin.log()
+        LOGGER.log()
         self._plugin.update_configuration(self._mod_conf.copy())
         self._update_apply_button()
     
     def on_Cancel_button_clicked(self, button):
         """Close without giving ClickConfigPlugin the modified configuration."""
-        self._plugin.log()
+        LOGGER.log()
         self.window.destroy()
     
     def on_Browse_button_clicked(self, button):
         """Browse to the configuration file."""
-        self._plugin.log()
+        LOGGER.log()
         self._plugin.open_config_dir()
     
     def on_Import_button_clicked(self, button):
         """Import ConfigSets and SelectionOps from another configuration file."""
-        self._plugin.log()
+        LOGGER.log()
         filename = self._filechooser_dialog(
             title='Import from a Click_Config configuration file')
         if filename:
@@ -232,13 +234,17 @@ class ConfigUI(object):
     
     def _update_apply_button(self):
         """Correct the Apply button's sensitivity."""
-        self._plugin.log()
+        LOGGER.log()
         apply_button = self.builder.get_object('Apply_button')
         has_changes = self._mod_conf != self._plugin.conf
-        self._plugin.logger.debug('has_changes: %s' % repr(has_changes))
+        LOGGER.log(var='has_changes')
         apply_button.set_sensitive(has_changes)
     
     def _filechooser_dialog(self, title='Open'):
+        """
+        Provide file selection dialog to user and return the selected filename.
+        """
+        LOGGER.log()
         dialog = gtk.FileChooserDialog(
             title=title,
             parent=self.window,
@@ -269,7 +275,7 @@ class ConfigUI(object):
     
     def on_config_combobox_entry_changed(self, combobox):
         """Update the configuration and interface based on the selection."""
-        self._plugin.log()
+        LOGGER.log()
         # Get objects
         config_combobox_entry = combobox
         config_add_button = self.builder.get_object("config_add_button")
@@ -289,7 +295,7 @@ class ConfigUI(object):
     
     def on_comboboxentryentry1_key_press_event(self, widget, event):
         """React to the Enter key here the same as for the Add button."""
-        self._plugin.log()
+        LOGGER.log()
         keyval = event.keyval
         keyval_name = gtk.gdk.keyval_name(keyval)
         if keyval_name in ('Return', 'KP_Enter'):
@@ -297,17 +303,17 @@ class ConfigUI(object):
     
     def on_config_add_button_clicked(self, button):
         """Call function to add the configuration."""
-        self._plugin.log()
+        LOGGER.log()
         self._add_config()
 
     def on_config_remove_button_clicked(self, button):
         """Call function to remove the configuration."""
-        self._plugin.log()
+        LOGGER.log()
         self._remove_config()
     
     def on_lang_checkbutton_toggled(self, togglebutton):
         """Update is_set_by_language setting and interface."""
-        self._plugin.log()
+        LOGGER.log()
         # Get objects
         lang_checkbutton = togglebutton
         # Get circumstance
@@ -328,6 +334,8 @@ class ConfigUI(object):
     # 2.2 - Support functions
     
     def _update_lang_checkbutton(self):
+        """Make the 'Configure by language' checkbox match its setting."""
+        LOGGER.log()
         # Get objects
         lang_checkbutton = self.builder.get_object("lang_checkbutton")
         # Update interface
@@ -335,7 +343,7 @@ class ConfigUI(object):
     
     def _update_config_combobox(self):
         """Reflect the ConfigSets and current ConfigSet in the interface."""
-        self._plugin.log()
+        LOGGER.log()
         configset_names = self._mod_conf.get_configset_names()
         combobox_list = configset_names[0:2] + [' - '] + configset_names[2:]
         config_combobox_entry = \
@@ -349,7 +357,7 @@ class ConfigUI(object):
     
     def _fill_comboboxentry(self, comboboxentry, items):
         """Put a list of the ConfigSet names in the combobox."""
-        self._plugin.log()
+        LOGGER.log()
         comboboxentry_liststore = gtk.ListStore(str, str)
         for item in items:
             comboboxentry_liststore.append(['', item])
@@ -360,20 +368,20 @@ class ConfigUI(object):
     
     def _row_separator_func(self, model, iter_):
         """Identify what item represents a separator."""
-        self._plugin.log()
+        LOGGER.log()
         row_is_a_separator = model.get_value(iter_, 1) == ' - '
         return row_is_a_separator
 
     def _get_configset_names(self):
         """Return a list of the ConfigSet names."""
-        self._plugin.log()
+        LOGGER.log()
         configset_names = [item.name for item in self._mod_conf.configsets]
         configset_names = configset_names[0:2] + sorted(configset_names[2:])
         return configset_names
     
     def _add_config(self):
         """Add the configuration."""
-        self._plugin.log()
+        LOGGER.log()
         # Get objects
         config_combobox_entry = \
             self.builder.get_object("config_combobox_entry")
@@ -389,11 +397,11 @@ class ConfigUI(object):
             self._update_config_combobox()
             self._update_config_display()
             self._update_language_frame()
-            self._plugin.log('ConfigSet added: %s.' % config_name)
+            LOGGER.log('ConfigSet added: %s.' % config_name)
     
     def _remove_config(self):
         """Remove the configuration."""
-        self._plugin.log()
+        LOGGER.log()
         # Get objects
         config_combobox_entry = \
             self.builder.get_object("config_combobox_entry")
@@ -415,16 +423,16 @@ class ConfigUI(object):
             self._update_config_combobox()
             self._update_config_display()
             self._update_language_frame()
-            self._plugin.log('ConfigSet removed: %s.' % config_name)
+            LOGGER.log('ConfigSet removed: %s.' % config_name)
     
     def _is_config_name_addable(self, config_name):
         """Check if ConfigSet of this name can be added."""
-        self._plugin.log()
+        LOGGER.log()
         return config_name not in self._mod_conf.get_configset_names()
     
     def _is_config_name_removable(self, config_name):
         """Check if ConfigSet of this name can be removed."""
-        self._plugin.log()
+        LOGGER.log()
         return (config_name in self._mod_conf.get_configset_names() and
                      config_name not in self.preserved_sets)
     
@@ -436,7 +444,7 @@ class ConfigUI(object):
         """
         Update the configuration and interface to reflect the SelectionOp name.
         """
-        self._plugin.log()
+        LOGGER.log()
         # Get objects
         config_combobox_entry = \
             self.builder.get_object("config_combobox_entry")
@@ -458,7 +466,7 @@ class ConfigUI(object):
     
     def _fill_combobox(self, combobox, items):
         """Put a list of the SelectionOp names in the combobox."""
-        self._plugin.log()
+        LOGGER.log()
         combobox_liststore = gtk.ListStore(str)
         for item in items:
             combobox_liststore.append([item])
@@ -468,7 +476,7 @@ class ConfigUI(object):
         """
         Reflect the five SelectionOps of the current ConfigSet in the widgets.
         """
-        self._plugin.log()
+        LOGGER.log()
         op_names = self._mod_conf.get_op_names()
         for click in range(1, 6):
             combobox = self.builder.get_object('combobox%d' % click)
@@ -482,7 +490,7 @@ class ConfigUI(object):
 
     def _set_combobox_op(self, combobox, op_name):
         """Reflect the SelectionOp in the widgets for the click."""
-        self._plugin.log()
+        LOGGER.log()
         # Get objects
         objects = {}
         objects['combobox'] = combobox
@@ -521,7 +529,7 @@ class ConfigUI(object):
     
     def on_define_comboboxentry_changed(self, combobox):
         """Update the configuration and interface for the SelectionOp name."""
-        self._plugin.log()
+        LOGGER.log()
         op_name = combobox.get_active_text().strip()
         op_names = self._mod_conf.get_op_names()
         if op_name in op_names:
@@ -531,12 +539,12 @@ class ConfigUI(object):
     
     def on_define_changed(self, editable):
         """Call function to update the Add button."""
-        self._plugin.log()
+        LOGGER.log()
         self._update_define_add_button()
     
     def on_define_entry_key_press_event(self, widget, event):
         """React to the Enter key here the same as for the Add button."""
-        self._plugin.log()
+        LOGGER.log()
         keyval = event.keyval
         keyval_name = gtk.gdk.keyval_name(keyval)
         if keyval_name in ('Return', 'KP_Enter'):
@@ -544,19 +552,19 @@ class ConfigUI(object):
     
     def on_define_add_button_clicked(self, button):
         """Call function to update the SelectionOp for the changed pattern."""
-        self._plugin.log()
+        LOGGER.log()
         self._add_define()
     
     def on_define_remove_button_clicked(self, button):
         """Call function to remove the current SelectionOp."""
-        self._plugin.log()
+        LOGGER.log()
         self._remove_define()
     
     # 4.2 - Support functions
     
     def _update_define_combobox(self):
         """Reflect the SelectionOps and current SelectionOp in the combobox."""
-        self._plugin.log()
+        LOGGER.log()
         define_comboboxentry = self.builder.get_object('define_comboboxentry')
         op_names = self._mod_conf.get_op_names()
         self._fill_comboboxentry(define_comboboxentry, op_names)
@@ -566,7 +574,7 @@ class ConfigUI(object):
     
     def _update_define_display(self):
         """Reflect the current SelectionOp in the interface."""
-        self._plugin.log()
+        LOGGER.log()
         # Get objects
         objects = {}
         objects['combobox'] = self.builder.get_object('define_comboboxentry')
@@ -603,7 +611,7 @@ class ConfigUI(object):
     
     def _update_define_add_button(self):
         """Correct the Add button's sensitivity for the pattern and flags."""
-        self._plugin.log()
+        LOGGER.log()
         # Get objects
         objects = {}
         objects['combobox'] = self.builder.get_object('define_comboboxentry')
@@ -634,7 +642,7 @@ class ConfigUI(object):
     
     def _add_define(self):
         """Add or update the SelectionOp."""
-        self._plugin.log()
+        LOGGER.log()
         # Get objects
         objects = {}
         objects['combobox'] = self.builder.get_object('define_comboboxentry')
@@ -662,14 +670,14 @@ class ConfigUI(object):
         # Update interface
             self._update_config_display()
             self._update_define_combobox()
-            self._plugin.log('SelectionOp added: %s.' % op_name)
+            LOGGER.log('SelectionOp added: %s.' % op_name)
     
     def _is_valid_re(self, pattern, flags):
         """
         Check the validity of the regular expression and
         inform the user if it fails.
         """
-        self._plugin.log()
+        LOGGER.log()
         try:
             is_valid = bool(re.compile(pattern, flags))
         except re.error, re_error:
@@ -690,7 +698,7 @@ class ConfigUI(object):
     
     def _show_message(self, title, message, gtk_message_type):
         """Display a simple dialog box with a message and an OK button."""
-        self._plugin.log()
+        LOGGER.log()
         dialog = gtk.MessageDialog(None, gtk.DIALOG_MODAL,
                                    gtk_message_type,
                                    gtk.BUTTONS_OK, message)
@@ -702,7 +710,7 @@ class ConfigUI(object):
     
     def _remove_define(self):
         """Select the preceding SelectionOp and remove the current one."""
-        self._plugin.log()
+        LOGGER.log()
         # Get objects
         combobox = self.builder.get_object("define_comboboxentry")
         # Get circumstance
@@ -724,14 +732,14 @@ class ConfigUI(object):
         # Update interface
             self._update_config_display()
             self._update_define_combobox()
-            self._plugin.log('SelectionOp removed: %s.' % op_name)
+            LOGGER.log('SelectionOp removed: %s.' % op_name)
     
     ### 5 - Language section
     
     def on_drag_data_get(self, widget, drag_context,
                           selection_data, info, timestamp):
         """Provide list of languages to drag-and-drop operation."""
-        self._plugin.log()
+        LOGGER.log()
         treeview = widget
         treeselection = treeview.get_selection()
         languages = self._get_list_from_treeselection(treeselection)
@@ -739,14 +747,14 @@ class ConfigUI(object):
     
     def _get_list_from_treeselection(self, treeselection):
         """Return a list of the selected values."""
-        self._plugin.log()
+        LOGGER.log()
         list_ = []
         treeselection.selected_foreach(self._append_text_from_model, list_)
         return list_
     
     def _append_text_from_model(self, treemodel, path, iter_, list_):
         """Append first-column value of the specified row to the list."""
-        self._plugin.log()
+        LOGGER.log()
         text = treemodel.get_value(iter_, 0)
         list_.append(text)
     
@@ -756,7 +764,7 @@ class ConfigUI(object):
         Assign languages from drag-and-drop operation to ConfigSet name of the
         receiving ScrolledWindow.
         """
-        self._plugin.log()
+        LOGGER.log()
         scrolledwindow = widget
         # Get the languages from the drag data
         text = selection_data.data
@@ -781,7 +789,7 @@ class ConfigUI(object):
     
     def _get_widget_by_name(self, container, name):
         """Recursively search to return the named child widget."""
-        self._plugin.log()
+        LOGGER.log()
         children = container.get_children()
         for child in children:
             if child.name == name:
@@ -793,6 +801,7 @@ class ConfigUI(object):
     
     def _remove_from_treeview(self, treeview, value):
         """Remove the language name from the TreeView."""
+        LOGGER.log()
         liststore = treeview.get_model()
         liststore_list = self._get_list_from_liststore(liststore)
         path = liststore_list.index(value)
@@ -803,6 +812,7 @@ class ConfigUI(object):
     
     def _add_to_treeview(self, treeview, value):
         """Add the language name to the TreeView."""
+        LOGGER.log()
         liststore = treeview.get_model()
         liststore_list = self._get_list_from_liststore(liststore)
         liststore_list.append(value)
@@ -817,7 +827,7 @@ class ConfigUI(object):
     
     def _select_languages(self, treeview, languages):
         """Select rows in the treeview corresponding to languages."""
-        self._plugin.log()
+        LOGGER.log()
         liststore = treeview.get_model()
         liststore_list = self._get_list_from_liststore(liststore)
         treeselection = treeview.get_selection()
@@ -827,13 +837,13 @@ class ConfigUI(object):
     
     def _get_list_from_liststore(self, liststore):
         """Return a list of the first-column treeview row values."""
-        self._plugin.log()
+        LOGGER.log()
         return [liststore.get_value(liststore.get_iter(i), 0)
                  for i in range(len(liststore))]
     
     def _update_language_frame(self):
         """Show or hide the language frame as appropriate."""
-        self._plugin.log()
+        LOGGER.log()
         # Get objects
         language_frame = self.builder.get_object("frame3")
         # Update interface
@@ -846,7 +856,7 @@ class ConfigUI(object):
     
     def _build_lang_table(self):
         """Replace the language table with one matching the configuration."""
-        self._plugin.log()
+        LOGGER.log()
         lang_vbox = self.builder.get_object("lang_vbox")
         # Get the old Table
         old_table = lang_vbox.get_children()[1]
@@ -891,7 +901,7 @@ class ConfigUI(object):
     
     def _make_scrolledwindow(self, configset):
         """Return a ScrolledWindow of the ConfigSet's assigned languages."""
-        self._plugin.log()
+        LOGGER.log()
         # Make a TreeView of the ConfigSet's assigned languages
         treeview = self._make_treeview(configset)
         # Configure the TreeView for being dragged from
@@ -918,7 +928,7 @@ class ConfigUI(object):
     
     def _make_treeview(self, configset):
         """Return a TreeView of the ConfigSet's assigned languages."""
-        self._plugin.log()
+        LOGGER.log()
         # Make a ListStore of the ConfigSet's assigned languages
         liststore = self._make_liststore(configset)
         # Make a TreeView of the ListStore
@@ -943,7 +953,7 @@ class ConfigUI(object):
     
     def _make_liststore(self, configset):
         """Return a ListStore of the ConfigSet's assigned languages."""
-        self._plugin.log()
+        LOGGER.log()
         liststore = gtk.ListStore(str)
         langauge_assignments = sorted(self._mod_conf.languages.items())
         for language, configset_name in langauge_assignments:
