@@ -1,7 +1,7 @@
 # -*- coding: utf8 -*-
-#  Click Config  plugin for Gedit
+#  Click Config  plugin for gedit
 #
-#  Copyright (C) 2010 Derek Veit
+#  Copyright (C) 2010-2011 Derek Veit
 #
 #  This program is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -17,17 +17,17 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 """
-This module provides the plugin object that Gedit interacts with.
+This module provides the plugin object that gedit interacts with.
 
 Classes:
-ClickConfigPlugin       -- object is loaded once by an instance of Gedit
-ClickConfigWindowHelper -- object is constructed for each Gedit window
+ClickConfigPlugin       -- object is loaded once by an instance of gedit
+ClickConfigWindowHelper -- object is constructed for each gedit window
 
-Each time the same Gedit instance makes a new window, Gedit calls the
+Each time the same gedit instance makes a new window, gedit calls the
 plugin's activate method.  Each time ClickConfigPlugin is so activated,
 it constructs a ClickConfigWindowHelper object to handle the new window.
 
-Settings common to all Gedit windows are attributes of ClickConfigPlugin.
+Settings common to all gedit windows are attributes of ClickConfigPlugin.
 Settings specific to one window are attributes of ClickConfigWindowHelper.
 
 """
@@ -50,19 +50,19 @@ LOGGER = Logger(level=('DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL')[2])
 class ClickConfigPlugin(gedit.Plugin):
     
     """
-    An object of this class is loaded once by a Gedit instance.
+    An object of this class is loaded once by a gedit instance.
     
     It establishes and maintains the configuration data, and it creates
-    a ClickConfigWindowHelper object for each Gedit main window.
+    a ClickConfigWindowHelper object for each gedit main window.
     
     Public methods:
-    activate                -- Gedit calls this to start the plugin.
-    deactivate              -- Gedit calls this to stop the plugin.
-    update_ui               -- Gedit calls this at certain times when
+    activate                -- gedit calls this to start the plugin.
+    deactivate              -- gedit calls this to stop the plugin.
+    update_ui               -- gedit calls this at certain times when
                                the ui changes.
-    is_configurable         -- Gedit calls this to check if the plugin
+    is_configurable         -- gedit calls this to check if the plugin
                                is configurable.
-    create_configure_dialog -- Gedit calls this when "Configure" is
+    create_configure_dialog -- gedit calls this when "Configure" is
                                selected in the Preferences Plugins tab.
                                Also, ClickConfigWindowHelper calls this
                                when Edit > Click Config > Configure is
@@ -74,7 +74,7 @@ class ClickConfigPlugin(gedit.Plugin):
                                configuration file's directory.  This is
                                called by the ConfigUI object when the
                                Browse button is clicked.
-    get_gedit_window        -- Returns the current Gedit window.
+    get_gedit_window        -- Returns the current gedit window.
     
     """
     
@@ -85,7 +85,7 @@ class ClickConfigPlugin(gedit.Plugin):
         gedit.Plugin.__init__(self)
         
         self._instances = {}
-        """Each Gedit window will get a ClickConfigWindowHelper instance."""
+        """Each gedit window will get a ClickConfigWindowHelper instance."""
         
         self.plugin_path = None
         """The directory path of this file and the configuration file."""
@@ -97,23 +97,31 @@ class ClickConfigPlugin(gedit.Plugin):
         """This object contains all the settings."""
     
     def activate(self, window):
-        """Start a ClickConfigWindowHelper instance for this Gedit window."""
+        """Start a ClickConfigWindowHelper instance for this gedit window."""
         LOGGER.log()
         if not self._instances:
             LOGGER.log('Click Config activating.')
             self.conf = Config(self)
             self.set_conf_defaults()
             self.plugin_path = os.path.dirname(os.path.realpath(__file__))
-            self.conf.filename = os.path.join(self.plugin_path,
-                                                 'click_config_configs')
+            
+            common_config_dir = os.path.expanduser('~/.config')
+            if not os.path.exists(common_config_dir):
+                os.mkdir(common_config_dir)
+            config_dir = os.path.join(common_config_dir, 'clickconfig')
+            if not os.path.exists(config_dir):
+                os.mkdir(config_dir)
+            self.conf.filename = os.path.join(config_dir,
+                                              'click_config_configs')
             if os.path.exists(self.conf.filename):
                 self.conf.load()
+            
             self.conf.check_language_configsets()
         self._instances[window] = ClickConfigWindowHelper(self, window)
         self._instances[window].activate()
     
     def deactivate(self, window):
-        """End the ClickConfigWindowHelper instance for this Gedit window."""
+        """End the ClickConfigWindowHelper instance for this gedit window."""
         LOGGER.log()
         self._instances[window].deactivate()
         self._instances.pop(window)
@@ -124,17 +132,17 @@ class ClickConfigPlugin(gedit.Plugin):
             LOGGER.log('Click Config deactivated.')
     
     def update_ui(self, window):
-        """Forward Gedit's update_ui command for this window."""
+        """Forward gedit's update_ui command for this window."""
         LOGGER.log()
         self._instances[window].update_ui()
     
     def is_configurable(self):
-        """Identify for Gedit that Click Config is configurable."""
+        """Identify for gedit that Click Config is configurable."""
         LOGGER.log()
         return True
     
     def create_configure_dialog(self):
-        """Produce the configuration window and provide it to Gedit."""
+        """Produce the configuration window and provide it to gedit."""
         LOGGER.log()
         if self.config_ui:
             self.config_ui.window.present()
@@ -151,7 +159,7 @@ class ClickConfigPlugin(gedit.Plugin):
         self.conf.ops = [
             SelectionOp('None',
                 preserved=True),
-            SelectionOp('Gedit word',
+            SelectionOp('gedit word',
                 pattern='[a-zA-Z]+|[0-9]+|[^a-zA-Z0-9]+',
                 preserved=True),
             SelectionOp('GNOME Terminal default',
@@ -179,10 +187,10 @@ class ClickConfigPlugin(gedit.Plugin):
                 flags=re.I),
             ]
         self.conf.configsets = [
-            ConfigSet('Gedit built-in',
+            ConfigSet('gedit built-in',
                 op_names=[
                     'None',
-                    'Gedit word',
+                    'gedit word',
                     'Line',
                     'None',
                     'None',
@@ -191,7 +199,7 @@ class ClickConfigPlugin(gedit.Plugin):
             ConfigSet('Click Config default',
                 op_names=[
                     'None',
-                    'Gedit word',
+                    'gedit word',
                     'Python name',
                     'Line+',
                     'Paragraph+',
@@ -200,7 +208,7 @@ class ClickConfigPlugin(gedit.Plugin):
             ConfigSet('Custom',
                 op_names=[
                     'None',
-                    'Gedit word',
+                    'gedit word',
                     'Python name',
                     'Line+',
                     'Paragraph+',
@@ -233,14 +241,14 @@ class ClickConfigPlugin(gedit.Plugin):
     
     def get_gedit_window(self):
         """
-        Return the current Gedit window.
+        Return the current gedit window.
         ConfigUI uses this to identify its parent window.
         """
         LOGGER.log()
         return gedit.app_get_default().get_active_window()
     
     def _get_languages(self):
-        """Return a list of the languages known to Gedit."""
+        """Return a list of the languages known to gedit."""
         LOGGER.log()
         gtk_lang_mgr = gtksourceview2.language_manager_get_default()
         language_ids = gtk_lang_mgr.get_language_ids()
@@ -253,7 +261,7 @@ class ClickConfigPlugin(gedit.Plugin):
         return language_names
     
     def _get_languages_by_section(self):
-        """Return a dictionary of the languages known to Gedit, grouped."""
+        """Return a dictionary of the languages known to gedit, grouped."""
         LOGGER.log()
         gtk_lang_mgr = gtksourceview2.language_manager_get_default()
         language_ids = gtk_lang_mgr.get_language_ids()
@@ -275,19 +283,21 @@ class ClickConfigWindowHelper(object):
     
     """
     ClickConfigPlugin creates a ClickConfigWindowHelper object for each
-    Gedit window.  This object receives mouse and menu inputs from the
-    Gedit window and responds by selecting text, or if the menu item is
+    gedit window.  This object receives mouse and menu inputs from the
+    gedit window and responds by selecting text, or if the menu item is
     for Configuration, it calls the plugin's method to open the
     configuration window.
     
     Public methods:
-    deactivate         -- ClickConfigPlugin calls this when Gedit calls
+    activate           -- ClickConfigPlugin calls this when gedit calls
+                          activate for this window.
+    deactivate         -- ClickConfigPlugin calls this when gedit calls
                           deactivate for this window.
     open_config_window -- calls ClickConfigPlugin method to open the
                           configuration window.
-    update_ui          -- ClickConfigPlugin calls this when Gedit calls
+    update_ui          -- ClickConfigPlugin calls this when gedit calls
                           update_ui for this window.  It activates the
-                          menu for the Gedit window and connects the
+                          menu for the gedit window and connects the
                           mouse event handler to the current View.
                           Also, ClickConfigWindowHelper.__init_ calls
                           this.
@@ -320,8 +330,11 @@ class ClickConfigWindowHelper(object):
         self._action_group = None
         """The menu's action group, saved for removal."""
         
-        self._time_of_last_click = [None, 0, 0, 0, 0, 0]
-        """Times of the most recent clicks for each of the five click types."""
+        self._last_click = [None, 0, 0, 0, 0, 0]
+        """
+        The gtk.TextIter of the most recent click and the times of the most
+        recent click for each of the five click types.
+        """
         
         gtk_settings = gtk.settings_get_default()
         gtk_doubleclick_ms = gtk_settings.get_property('gtk-double-click-time')
@@ -339,8 +352,11 @@ class ClickConfigWindowHelper(object):
         self._handlers_per_viewport = {}
         """A special 'add' signal handler for each Viewport found."""
         
-        self._drag_handler_ids = ()
+        self._drag_handler_ids_per_view = {}
         """Motion and button-release handlers for drag selecting."""
+        
+        self.tab_removed_handler = None
+        """Signal handler for a tab being removed from the window."""
         
         # These attributes are used for extending the selection for click-drag.
         self._word_re = None
@@ -432,20 +448,22 @@ class ClickConfigWindowHelper(object):
         self._insert_menu()
     
     def activate(self):
-        """End this instance of Click Config"""
+        """Start this instance of the plugin"""
         LOGGER.log()
         LOGGER.log('Click Config activating for %s' % self._window)
         self._insert_menu()
+        self._connect_window()
         self.update_ui()
     
     def deactivate(self):
-        """End this instance of Click Config"""
+        """End this instance of the plugin"""
         LOGGER.log()
         self._disconnect_mouse_handlers()
         self._disconnect_scrollwin_handlers()
         self._disconnect_viewport_handlers()
+        self._disconnect_window()
         self._remove_menu()
-        self._time_of_last_click = None
+        self._last_click = None
         self._double_click_time = None
         self._plugin = None
         LOGGER.log('Click Config deactivated for %s' % self._window)
@@ -481,9 +499,9 @@ class ClickConfigWindowHelper(object):
         """
         LOGGER.log()
         doc = self._window.get_active_document()
+        view = self._window.get_active_view()
         tab = self._window.get_active_tab()
-        current_view = self._window.get_active_view()
-        if doc and current_view and current_view.get_editable():
+        if doc and view and view.get_editable():
             if self._plugin.conf.is_set_by_language:
                 language = self.get_doc_language()
                 LOGGER.log('Language detected: %s' % language)
@@ -493,37 +511,75 @@ class ClickConfigWindowHelper(object):
                     LOGGER.log('ConfigSet selected: %s' %
                                              configset_name)
             self._action_group.set_sensitive(True)
-            scrollwin = tab.get_children()[0]
-            if scrollwin not in self._handlers_per_scrollwin:
-                """Prepare to catch new Split View views."""
-                self._handlers_per_scrollwin[scrollwin] = \
-                    scrollwin.connect('add',
-                                      self.on_scrollwin_add, self._window)
-            child = scrollwin.get_child()
-            if type(child).__name__ == 'View':
-                """Connect to the view within the normal GUI structure."""
-                view = child
-                self._connect_view(view)
-            elif type(child).__name__ == 'Viewport':
-                """Connect to views within Split View's GUI structure."""
-                viewport = child
-                vbox = viewport.get_child()
-                if vbox:
-                    vpaned = vbox.get_children()[1]
-                    scrolled_window_1 = vpaned.get_child1()
-                    scrolled_window_2 = vpaned.get_child2()
-                    view_1 = scrolled_window_1.get_child()
-                    view_2 = scrolled_window_2.get_child()
-                    LOGGER.log('Split View 1: %s' % repr(view_1))
-                    LOGGER.log('Split View 2: %s' % repr(view_2))
-                    self._connect_view(view_1)
-                    self._connect_view(view_2)
+            self._connect_tab(tab)
+    
+    def _connect_window(self):
+        """Connect handler for tab removal."""
+        LOGGER.log()
+        self.tab_removed_handler = self._window.connect('tab-removed',
+            self.on_tab_removed)
+        
+    def _disconnect_window(self):
+        """Disconnect handler for tab removal."""
+        LOGGER.log()
+        if self._window.handler_is_connected(self.tab_removed_handler):
+            self._window.disconnect(self.tab_removed_handler)
+    
+    def on_tab_removed(self, window, tab):
+        LOGGER.log()
+        LOGGER.log(var='window')
+        LOGGER.log(var='tab')
+        self._disconnect_tab(tab)
+        return False
+    
+    def _connect_tab(self, tab):
+        """Connect signal handlers to the View(s) in the tab."""
+        LOGGER.log()
+        scrollwin = tab.get_children()[0]
+        if scrollwin not in self._handlers_per_scrollwin:
+            # Prepare to catch any new Split View views.
+            self._handlers_per_scrollwin[scrollwin] = \
+                scrollwin.connect('add',
+                                  self.on_scrollwin_add, self._window)
+        for view in self._get_scrollwin_views(scrollwin):
+            self._connect_view(view)
+    
+    def _disconnect_tab(self, tab):
+        """Disconnect signal handlers from the View(s) in the tab."""
+        LOGGER.log()
+        scrollwin = tab.get_children()[0]
+        if scrollwin in self._handlers_per_scrollwin:
+            # Stop catching any new Split View views.
+            handler_id = self._handlers_per_scrollwin.pop(scrollwin)
+            if scrollwin.handler_is_connected(handler_id):
+                scrollwin.disconnect(handler_id)
+        for view in self._get_scrollwin_views(scrollwin):
+            self._disconnect_view(view)
+    
+    def _get_scrollwin_views(self, scrollwin):
+        """Return the View(s) in the ScrolledWindow."""
+        child = scrollwin.get_child()
+        if type(child).__name__ == 'View':
+            # the view within the normal GUI structure.
+            view = child
+            return [view]
+        elif type(child).__name__ == 'Viewport':
+            # views within Split View's GUI structure.
+            viewport = child
+            vbox = viewport.get_child()
+            if vbox:
+                vpaned = vbox.get_children()[1]
+                scrolled_window_1 = vpaned.get_child1()
+                scrolled_window_2 = vpaned.get_child2()
+                view_1 = scrolled_window_1.get_child()
+                view_2 = scrolled_window_2.get_child()
+                LOGGER.log('Split View 1: %s' % repr(view_1))
+                LOGGER.log('Split View 2: %s' % repr(view_2))
+                return [view_1, view_2]
     
     def on_scrollwin_add(self, scrollwin, widget, window):
         """Call update_ui to add any new view added by Split View"""
         LOGGER.log()
-        #scrollwin.disconnect(self._handlers_per_scrollwin[scrollwin])
-        #self._handlers_per_scrollwin[scrollwin] = None
         if type(widget).__name__ == 'Viewport':
             viewport = widget
             vbox = viewport.get_child()
@@ -557,11 +613,26 @@ class ClickConfigWindowHelper(object):
             self._connect_mouse_handler(view)
             LOGGER.log('Connected to: %s' % repr(view))
     
+    def _disconnect_view(self, view):
+        """Disconnect the mouse handler from the view."""
+        LOGGER.log()
+        LOGGER.log(var='view')
+        if view in self._mouse_handler_ids_per_view:
+            self._disconnect_mouse_handler(view)
+            LOGGER.log('Disconnected from: %s' % repr(view))
+    
     def _connect_mouse_handler(self, view):
         """Connect the handler for the view's button_press_event."""
         LOGGER.log()
         self._mouse_handler_ids_per_view[view] = \
             view.connect("button_press_event", self._handle_button_press)
+    
+    def _disconnect_mouse_handler(self, view):
+        """Disconnect the handler for the view's button_press_event."""
+        LOGGER.log()
+        handler_id = self._mouse_handler_ids_per_view.pop(view)
+        if view.handler_is_connected(handler_id):
+            view.disconnect(handler_id)
     
     def _connect_drag_handler(self, view):
         """
@@ -571,11 +642,13 @@ class ClickConfigWindowHelper(object):
         drag-selecting and the release event will be used to end it.
         """
         LOGGER.log()
-        self._drag_handler_ids = (
+        self._drag_handler_ids_per_view[view] = [
             view.connect("motion_notify_event", self._drag_select),
-            view.connect_after("button_release_event",
-                               self._disconnect_drag_handler)
-            )
+            view.connect("button_release_event",
+                         self._handle_button_release)
+            ]
+        LOGGER.log('Connected drag handlers %r: ' %
+                   self._drag_handler_ids_per_view[view], level='debug')
     
     def _drag_select(self, widget, event):
         """
@@ -608,12 +681,17 @@ class ClickConfigWindowHelper(object):
         # self._word_re will be used
         self._select_regex(drag_iter, word_re=None, extend=True)
     
-    def _disconnect_drag_handler(self, widget, event=None):
+    def _disconnect_drag_handler(self, view):
         """Disconnect the event handlers for drag selecting."""
         LOGGER.log()
-        view = widget
-        for handler_id in self._drag_handler_ids:
-            view.disconnect(handler_id)
+        handler_ids = self._drag_handler_ids_per_view.pop(view)
+        for handler_id in handler_ids:
+            if view.handler_is_connected(handler_id):
+                LOGGER.log('Disconnecting drag handler %r' % handler_id,
+                           level='debug')
+                view.disconnect(handler_id)
+            else:
+                LOGGER.log('handler %r is not connected' % handler_id)
         # Clear the match data of the click.
         self._word_re = None
         self._boundaries = None
@@ -652,80 +730,93 @@ class ClickConfigWindowHelper(object):
         LOGGER.log()
         handled = False
         if event.button == 1:
+            click_iter = self._get_click_iter(view, event)
             now = time.time()
             handlers_by_type = {
                 gtk.gdk.BUTTON_PRESS: self._handle_1button_press,
                 gtk.gdk._2BUTTON_PRESS: self._handle_2button_press,
                 gtk.gdk._3BUTTON_PRESS: self._handle_3button_press,
                 }
-            handled, click = handlers_by_type[event.type](now)
+            handled, click = handlers_by_type[event.type](click_iter, now)
             if click:
-                click_iter = self._get_click_iter(view, event)
                 handled = self._make_assigned_selection(click, click_iter)
                 if handled:
                     self._connect_drag_handler(view)
         return handled
     
-    def _handle_1button_press(self, now):
+    def _handle_button_release(self, widget, event):
+        """Handle left mouse button being released."""
+        LOGGER.log()
+        if event.button == 1:
+            self._disconnect_drag_handler(widget)
+        return False
+    
+    def _handle_1button_press(self, click_iter, now):
         """Detect 5-click, 4-click, or 1-click. Otherwise eat the signal."""
         LOGGER.log()
         handled = False
         click = None
-        if now - self._time_of_last_click[4] < self._double_click_time:
-            LOGGER.log('Quintuple-click.')
-            # QUINTUPLE-CLICKS are handled here.
-            self._time_of_last_click[5] = now
-            click = 5
-        elif now - self._time_of_last_click[3] < self._double_click_time:
-            LOGGER.log('Quadruple-click.')
-            # QUADRUPLE-CLICKS are handled here.
-            self._time_of_last_click[4] = now
-            click = 4
-        elif now - self._time_of_last_click[2] < self._double_click_time:
-            LOGGER.log('(3rd click of a triple-click.)', level='debug')
-            # Ignore and consume it.  Triple-clicks are not handled here.
-            handled = True
-        elif now - self._time_of_last_click[1] < self._double_click_time:
-            LOGGER.log('(2nd click of a double-click.)', level='debug')
-            # Ignore and consume it.  Double-clicks are not handled here.
-            handled = True
-        else:
+        if self._last_click[0] and click_iter.equal(self._last_click[0]):
+            # The pointer must remain in the same position as the first click,
+            # for it to be considered a successive click of a multiple click.
+            if now - self._last_click[4] < self._double_click_time:
+                LOGGER.log('Quintuple-click.')
+                # QUINTUPLE-CLICKS are handled here.
+                self._last_click[5] = now
+                click = 5
+            elif now - self._last_click[3] < self._double_click_time:
+                LOGGER.log('Quadruple-click.')
+                # QUADRUPLE-CLICKS are handled here.
+                self._last_click[4] = now
+                click = 4
+            elif now - self._last_click[2] < self._double_click_time:
+                LOGGER.log('(3rd click of a triple-click.)', level='debug')
+                # Ignore and consume it.  Triple-clicks are not handled here.
+                handled = True
+            elif now - self._last_click[1] < self._double_click_time:
+                LOGGER.log('(2nd click of a double-click.)', level='debug')
+                # Ignore and consume it.  Double-clicks are not handled here.
+                handled = True
+        if not handled and not click:
             LOGGER.log('Single-click.')
             # SINGLE-CLICKS are handled here.
-            self._time_of_last_click[1] = now
+            # Record this as the original click.
+            self._last_click = [click_iter, now, 0, 0, 0, 0]
             click = 1
         return handled, click
     
-    def _handle_2button_press(self, now):
+    def _handle_2button_press(self, click_iter, now):
         """Detect 2-click. Otherwise eat the signal."""
         LOGGER.log()
         handled = False
         click = None
-        if (now - self._time_of_last_click[4]) < self._double_click_time:
-            LOGGER.log('(4th & 5th of a quintuple-click.)', level='debug')
-            # Ignore and consume it.  Quintuple-clicks are not handled here.
-            handled = True
-        else:
-            LOGGER.log('Double-click.')
-            # DOUBLE-CLICKS are handled here.
-            self._time_of_last_click[2] = now
-            click = 2
+        if self._last_click[0] and click_iter.equal(self._last_click[0]):
+            if (now - self._last_click[4]) < self._double_click_time:
+                LOGGER.log('(4th & 5th of a quintuple-click.)', level='debug')
+                # Ignore and consume it.  Quintuple-clicks are not handled here.
+                handled = True
+            else:
+                LOGGER.log('Double-click.')
+                # DOUBLE-CLICKS are handled here.
+                self._last_click[2] = now
+                click = 2
         return handled, click
     
-    def _handle_3button_press(self, now):
+    def _handle_3button_press(self, click_iter, now):
         """Detect 3-click. Otherwise eat the signal."""
         LOGGER.log()
         handled = False
         click = None
-        if (now - self._time_of_last_click[5]) < self._double_click_time:
-            LOGGER.log('(4th-6th of a sextuple-click.)', level='debug')
-            # Ignore and consume it.  Sextuple-clicks are not handled here.
-            handled = True
-        else:
-            LOGGER.log('Triple-click.')
-            # TRIPLE-CLICKS are handled here.
-            self._time_of_last_click[3] = now
-            click = 3
+        if self._last_click[0] and click_iter.equal(self._last_click[0]):
+            if (now - self._last_click[5]) < self._double_click_time:
+                LOGGER.log('(4th-6th of a sextuple-click.)', level='debug')
+                # Ignore and consume it.  Sextuple-clicks are not handled here.
+                handled = True
+            else:
+                LOGGER.log('Triple-click.')
+                # TRIPLE-CLICKS are handled here.
+                self._last_click[3] = now
+                click = 3
         return handled, click
     
     def _get_click_iter(self, view, event):
@@ -817,7 +908,16 @@ class ClickConfigWindowHelper(object):
         else:
             self._click_start_iter = target_start_iter
             self._click_end_iter = target_end_iter
+        
+        if doc.get_selection_bounds():
+            current_start_iter, current_end_iter = doc.get_selection_bounds()
+            if (current_start_iter.equal(target_start_iter) and
+                    current_end_iter.equal(target_end_iter)):
+                # The text is already selected; there's no need to re-select it.
+                return True
         doc.select_range(target_start_iter, target_end_iter)
+        selected_text = doc.get_text(target_start_iter, target_end_iter)
+        LOGGER.log('Selected text:\n%s' % selected_text)
         # These two lines will activate search highlighting on the text:
 #        found_text = doc.get_text(target_start_iter, target_end_iter)
 #        doc.set_search_text(found_text, 1)
