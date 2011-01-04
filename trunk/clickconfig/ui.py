@@ -261,6 +261,7 @@ class ConfigUI(object):
         text_file_filter.add_mime_type("text/plain")
         dialog.add_filter(text_file_filter)
         dialog.set_filter(text_file_filter)
+        dialog.set_current_folder(self._plugin.plugin_path)
         response = dialog.run()
         if response == gtk.RESPONSE_OK:
             filename = dialog.get_filename()

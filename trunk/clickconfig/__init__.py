@@ -1,7 +1,7 @@
 # -*- coding: utf8 -*-
-#  Click_Config plugin for Gedit
+#  Click_Config plugin for gedit
 #
-#  Copyright (C) 2010 Derek Veit
+#  Copyright (C) 2010-2011 Derek Veit
 #
 #  This program is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -19,8 +19,8 @@
 """
 Click_Config plugin package
 
-2010-09-20
-Version 1.2.0
+2011-01-03
+Version 1.3.0
 
 Description:
 This plugin provides configurable text selections based on single or multiple
@@ -32,7 +32,7 @@ underscores, or a quadruple click can be set to select a paragraph.
 
 Regular expressions are used for specifying types of text selections.
 
-The plugin also creates a submenu within Gedit's Edit menu for accessing the
+The plugin also creates a submenu within gedit's Edit menu for accessing the
 configuration window or directly making a selection.  This allows for hotkeys
 to be set for any of the defined selections.
 
@@ -42,13 +42,14 @@ Typical location:
 /usr/lib/gedit-2/plugins    (for all users)
 
 Files:
-clickconfig.gedit-plugin    -- Gedit reads this to know about the plugin.
+clickconfig.gedit-plugin    -- gedit reads this to know about the plugin.
 clickconfig/                -- Package directory
-    __init__.py             -- Package module loaded by Gedit.
+    __init__.py             -- Package module loaded by gedit.
     click_config.py         -- Plugin and plugin helper classes.
     data.py                 -- Configuration data classes.
     dictfile.py             -- Reads/writes dictionaries from/to files.
     ui.py                   -- Configuration window class.
+    logger.py               -- Module providing simple logging.
     Click_Config.xml        -- Configuration window layout (from .glade file)
     Click_Config.glade      -- Configuration window layout from Glade.
     gpl.txt                 -- GNU General Public License.
@@ -56,13 +57,13 @@ clickconfig/                -- Package directory
     click_config_configs    -- Created by user customization to store settings.
 
 How it loads:
-1. Gedit finds clickconfig.gedit-plugin in its plugins directory.
-2. That file tells Gedit to use Python to load the clickconfig module.
+1. gedit finds clickconfig.gedit-plugin in its plugins directory.
+2. That file tells gedit to use Python to load the clickconfig module.
 3. Python identifies the clickconfig directory as the clickconfig module.
 4. Python loads __init__.py (this file) from the clickconfig directory.
 5. This file imports the ClickConfigPlugin class from click_config.py.
-6. Gedit identifies ClickConfigPlugin as the gedit.Plugin object.
-7. Gedit calls methods of ClickConfigPlugin.
+6. gedit identifies ClickConfigPlugin as the gedit.Plugin object.
+7. gedit calls methods of ClickConfigPlugin.
 
 """
 from .click_config import ClickConfigPlugin
